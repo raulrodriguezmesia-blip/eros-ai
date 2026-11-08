@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eros AI - Autonomous Engineering Governance Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen" x-data="dashboard()" x-init="init()">
+
+    <!-- Header -->
+    <header class="border-b border-gray-800 bg-gray-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xl font-bold">E</div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">EROS AI</h1>
+                    <p class="text-xs text-gray-400">Analyze. Govern. Remediate. Validate.</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-xs text-gray-500" x-text="statusText"></span>
+                <div class="w-2 h-2 rounded-full bg-green-500 pulse-dot"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+        <!-- KPI Cards -->
+        <section>
+            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Engineering Health</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+                    <p class="text-xs text-gray-500">Engineering Health</p>
+                    <p class="text-3xl font-bold mt-1" :class="healthColor" x-text="kpis.health + '%'"></p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+                    <p class="text-xs text-gray-500">Security Risk</p>
+                    <p class="text-3xl font-bold mt-1" :class="riskColor" x-text="kpis.risk"></p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+                    <p class="text-xs text-gray-500">Compliance</p>
+                    <p class="text-3xl font-bold mt-1" :class="complianceColor" x-text="kpis.compliance"></p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+                    <p class="text-xs text-gray-500">Critical Findings</p>
+                    <p class="text-3xl font-bold mt-1 text-red-400" x-text="kpis.critical"></p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+                    <p class="text-xs text-gray-500">Total Findings</p>
+                    <p class="text-3xl font-bold mt-1 text-yellow-400" x-text="kpis.total"></p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+                    <p class="text-xs text-gray-500">Patches Generated</p>
+                    <p class="text-3xl font-bold mt-1 text-green-400" x-text="kpis.patches"></p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+                    <p class="text-xs text-gray-500">Validated Fixes</p>
+                    <p class="text-3xl font-bold mt-1 text-emerald-400" x-text="kpis.validated"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Agents + Feature Flags -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Agents -->
+            <section class="lg:col-span-2">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Agents</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <template x-for="agent in agents" :key="agent.name">
+                        <div class="bg-gray-900 rounded-xl p-5 border border-gray-800 hover:border-gray-700 transition">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl" x-text="agent.icon"></span>
+                                    <div>
+                                        <h3 class="font-semibold" x-text="agent.label"></h3>
+                                        <p class="text-xs text-gray-500" x-text="agent.name"></p>
+                                    </div>
+                                </div>
+                                <span class="text-xs px-2 py-1 rounded-full"
+                                      :class="agent.status === 'Active' ? 'bg-green-900/50 text-green-400' : 'bg-gray-800 text-gray-400'"
+                                      x-text="agent.status"></span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400">Findings</span>
+                                <span class="font-bold" :class="agent.findings > 0 ? 'text-red-400' : 'text-green-400'" x-text="agent.findings"></span>
+                            </div>
+                            <div class="mt-2 w-full bg-gray-800 rounded-full h-1.5">
+                                <div class="h-1.5 rounded-full transition-all duration-500"
+                                     :class="agent.findings > 0 ? 'bg-red-500' : 'bg-green-500'"
+                                     :style="'width: ' + Math.min(agent.findings * 20 + 10, 100) + '%'"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+
+            <!-- Feature Flags -->
+            <section>
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Feature Flags</h2>
+                <div class="bg-gray-900 rounded-xl p-5 border border-gray-800 space-y-4">
+                    <template x-for="flag in flags" :key="flag.key">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium" x-text="flag.label"></p>
+                                <p class="text-xs text-gray-500" x-text="flag.description"></p>
+                            </div>
+                            <button @click="toggleFlag(flag.key)"
+                                    class="relative w-12 h-6 rounded-full transition-colors duration-200"
+                                    :class="flag.value ? 'bg-blue-600' : 'bg-gray-700'">
+                                <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-200"
+                                      :class="flag.value ? 'translate-x-6' : 'translate-x-0'"></span>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </div>
+
+        <!-- Analyze Section -->
+        <section class="bg-gray-900 rounded-xl p-6 border border-gray-800">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Code Analysis</h2>
+                <div class="flex gap-2">
+                    <button @click="loadSample()" class="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 rounded-lg transition">
+                        Load Vulnerable Sample
+                    </button>
+                    <button @click="analyze()" :disabled="loading"
+                            class="px-4 py-1.5 text-xs bg-blue-600 hover:bg-blue-500 disabled:opacity-50 rounded-lg transition font-medium">
+                        <span x-show="!loading">Analyze Code</span>
+                        <span x-show="loading" x-cloak>Analyzing...</span>
+                    </button>
+                </div>
+            </div>
+            <textarea x-model="code" rows="8"
+                      class="w-full bg-gray-950 border border-gray-700 rounded-lg p-4 font-mono text-sm text-gray-300 focus:outline-none focus:border-blue-500 resize-none"
+                      placeholder="Paste your code here..."></textarea>
+        </section>
+
+        <!-- Findings -->
+        <section x-show="findings.length > 0" x-cloak>
+            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Findings</h2>
+            <div class="space-y-3">
+                <template x-for="(f, idx) in findings" :key="idx">
+                    <div class="bg-gray-900 rounded-xl p-5 border border-gray-800">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start gap-3">
+                                <span class="text-xs font-bold px-2 py-1 rounded"
+                                      :class="severityClass(f.severity)" x-text="f.severity"></span>
+                                <div>
+                                    <h3 class="font-semibold text-sm" x-text="f.description"></h3>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        <span x-text="f.agent"></span> &middot;
+                                        <span x-text="f.cwe || 'N/A'"></span> &middot;
+                                        Line <span x-text="f.line || '?'"></span>
+                                    </p>
+                                    <p class="text-xs text-gray-400 mt-2" x-text="f.fix"></p>
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                        <span class="text-xs px-2 py-0.5 rounded bg-blue-900/40 text-blue-300" x-text="f.reachability"></span>
+                                        <span class="text-xs px-2 py-0.5 rounded bg-purple-900/40 text-purple-300" x-text="f.business_impact"></span>
+                                        <span class="text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-400" x-text="(f.confidence * 100).toFixed(0) + '% conf'"></span>
+                                    </div>
+                                    <template x-if="f.patch">
+                                        <div class="mt-3">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <span class="text-xs px-2 py-0.5 rounded bg-green-900/50 text-green-400">AI Generated</span>
+                                                <span x-show="f.validated" class="text-xs px-2 py-0.5 rounded bg-emerald-900/50 text-emerald-400">Sandbox Verified</span>
+                                            </div>
+                                            <button @click="showPatch = showPatch === idx ? null : idx"
+                                                    class="text-xs text-blue-400 hover:text-blue-300">
+                                                <span x-text="showPatch === idx ? 'Hide Patch' : 'View Patch'"></span>
+                                            </button>
+                                            <pre x-show="showPatch === idx" x-cloak
+                                                 class="mt-2 bg-gray-950 rounded-lg p-3 text-xs text-green-400 overflow-x-auto"
+                                                 x-text="f.patch"></pre>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <!-- Risk Level Banner -->
+        <div x-show="lastResult" x-cloak
+             class="rounded-xl p-4 border text-center"
+             :class="riskBannerClass">
+            <p class="text-sm font-medium">
+                Risk Level: <span class="font-bold" x-text="lastResult?.risk_level"></span>
+                &middot; <span x-text="lastResult?.duration_ms"></span>ms
+                &middot; <span x-text="lastResult?.patches_generated"></span> patches generated
+            </p>
+        </div>
+    </main>
+
+    <script>
+        function dashboard() {
+            return {
+                code: '',
+                loading: false,
+                findings: [],
+                lastResult: null,
+                showPatch: null,
+                statusText: 'Ready',
+                kpis: { health: 92, risk: 'LOW', compliance: 'PASS', critical: 0, total: 0, patches: 0, validated: 0 },
+                agents: [
+                    { name: 'security_agent', label: 'Security Guardian', icon: '🛡️', status: 'Active', findings: 0 },
+                    { name: 'architecture_agent', label: 'Quality Inspector', icon: '🔍', status: 'Active', findings: 0 },
+                    { name: 'compliance_agent', label: 'Compliance Enforcer', icon: '✅', status: 'Active', findings: 0 },
+                    { name: 'remediation_agent', label: 'Fix Generator', icon: '🛠️', status: 'Ready', findings: 0 },
+                ],
+                flags: [
+                    { key: 'deep_ast_analysis', label: 'Deep Analysis', description: 'AST deep scan vs regex', value: false },
+                    { key: 'auto_patch_generation', label: 'Auto Remediation', description: 'Generate code patches', value: false },
+                    { key: 'strict_compliance_mode', label: 'Strict Compliance', description: 'OWASP blocking mode', value: false },
+                ],
+
+                get healthColor() {
+                    if (this.kpis.health >= 80) return 'text-green-400';
+                    if (this.kpis.health >= 50) return 'text-yellow-400';
+                    return 'text-red-400';
+                },
+                get riskColor() {
+                    const map = { CRITICAL: 'text-red-500', HIGH: 'text-red-400', MEDIUM: 'text-yellow-400', LOW: 'text-green-400' };
+                    return map[this.kpis.risk] || 'text-gray-400';
+                },
+                get complianceColor() {
+                    return this.kpis.compliance === 'PASS' ? 'text-green-400' : 'text-red-400';
+                },
+                get riskBannerClass() {
+                    const map = {
+                        CRITICAL: 'bg-red-900/30 border-red-700 text-red-300',
+                        HIGH: 'bg-orange-900/30 border-orange-700 text-orange-300',
+                        MEDIUM: 'bg-yellow-900/30 border-yellow-700 text-yellow-300',
+                        LOW: 'bg-green-900/30 border-green-700 text-green-300',
+                    };
+                    return map[this.lastResult?.risk_level] || 'bg-gray-900 border-gray-700';
+                },
+
+                async init() {
+                    // Load current flags
+                    const res = await fetch('/flags');
+                    const data = await res.json();
+                    for (const f of this.flags) {
+                        f.value = data.flags[f.key] || false;
+                    }
+                },
+
+                async toggleFlag(key) {
+                    const flag = this.flags.find(f => f.key === key);
+                    const newVal = !flag.value;
+                    await fetch(`/flags/${key}?value=${newVal}`, { method: 'POST' });
+                    flag.value = newVal;
+                },
+
+                loadSample() {
+                    this.code = `password = "admin123"\napi_key = "sk-1234567890abcdef"\n\ndef get_user(user_id):\n    return db.execute(f"SELECT * FROM users WHERE id={user_id}")\n\ndef run_command(cmd):\n    import os\n    os.system(cmd)\n\ndef load_data():\n    import pickle\n    data = pickle.loads(user_input)\n`;
+                },
+
+                async analyze() {
+                    if (!this.code.trim()) return;
+                    this.loading = true;
+                    this.statusText = 'Analyzing...';
+                    try {
+                        const res = await fetch('/analyze', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ code: this.code, language: 'python' })
+                        });
+                        const data = await res.json();
+                        this.findings = data.findings || [];
+                        this.lastResult = data;
+
+                        // Update KPIs
+                        this.kpis.total = this.findings.length;
+                        this.kpis.critical = this.findings.filter(f => f.severity === 'CRITICAL').length;
+                        this.kpis.patches = data.patches_generated || 0;
+                        this.kpis.validated = this.findings.filter(f => f.validated).length;
+                        this.kpis.risk = data.risk_level;
+                        this.kpis.compliance = data.risk_level === 'CRITICAL' ? 'FAIL' : 'PASS';
+                        this.kpis.health = Math.max(0, 100 - (this.kpis.critical * 25 + this.findings.filter(f => f.severity === 'HIGH').length * 10));
+
+                        // Update agent findings counts
+                        for (const agent of this.agents) {
+                            agent.findings = this.findings.filter(f => f.agent === agent.name).length;
+                        }
+
+                        this.statusText = `Done in ${data.duration_ms}ms`;
+                    } catch (e) {
+                        this.statusText = 'Error: ' + e.message;
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                severityClass(s) {
+                    const map = {
+                        CRITICAL: 'bg-red-900/60 text-red-300',
+                        HIGH: 'bg-orange-900/60 text-orange-300',
+                        MEDIUM: 'bg-yellow-900/60 text-yellow-300',
+                        LOW: 'bg-blue-900/60 text-blue-300',
+                        INFO: 'bg-gray-800 text-gray-400',
+                    };
+                    return map[s] || 'bg-gray-800 text-gray-400';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
