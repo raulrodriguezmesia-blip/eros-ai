@@ -1,5 +1,7 @@
 import re
 
+from typing import ClassVar
+
 from eros.agents.base import BaseAgent
 from eros.config.feature_flags import FeatureFlag, FeatureFlags
 from eros.models.schemas import Finding, Severity
@@ -9,7 +11,7 @@ class ComplianceAgent(BaseAgent):
     name = "compliance_agent"
     description = "Enforces enterprise policies and OWASP Top 10 compliance"
 
-    OWASP_RULES = [
+    OWASP_RULES: ClassVar[list] = [
         (r"eval\(", "A03:2021 - Injection (eval usage)", "CWE-94"),
         (r"pickle\.loads", "A08:2021 - Software and Data Integrity Failures", "CWE-502"),
         (r"yaml\.load\([^)]*\)(?!.*Loader)", "A08:2021 - Unsafe YAML deserialization", "CWE-502"),

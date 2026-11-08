@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any
+from typing import Any, ClassVar
 
 from eros.config.settings import settings
 
@@ -13,7 +13,7 @@ class FeatureFlag(str, Enum):
 class FeatureFlags:
     """Desacoplado: env vars ahora, Azure App Config después."""
 
-    _overrides: dict[str, bool] = {}
+    _overrides: ClassVar[dict[str, bool]] = {}
 
     @classmethod
     def is_enabled(cls, flag: FeatureFlag) -> bool:

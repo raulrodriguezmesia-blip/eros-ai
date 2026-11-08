@@ -14,12 +14,12 @@ class BaseAgent(ABC):
     async def run(self, code: str, language: str) -> list[Finding]:
         try:
             return await self.analyze(code, language)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return [
                 Finding(
                     agent=self.name,
                     phase="error",
                     severity="INFO",
-                    description=f"Agent {self.name} failed: {str(e)}",
+                    description=f"Agent {self.name} failed: {e!s}",
                 )
             ]

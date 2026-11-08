@@ -22,10 +22,6 @@ async def test_ai_003_circuit_breaker():
     client.api_key = "fake-key"
     client._client = None
 
-    # Force failures
-    with patch.object(client, "_get_client", return_value=None):
-        pass
-
     # Simulate 3 failures manually
     client._failure_count = 3
     client._circuit_open = True

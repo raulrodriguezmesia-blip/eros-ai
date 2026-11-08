@@ -14,7 +14,7 @@ async def client():
 @pytest.fixture(autouse=True)
 def reset_flags():
     """Reset feature flags before each test."""
-    from eros.config.feature_flags import FeatureFlags, FeatureFlag
+    from eros.config.feature_flags import FeatureFlag, FeatureFlags
 
     for flag in FeatureFlag:
         FeatureFlags.clear_override(flag)

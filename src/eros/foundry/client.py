@@ -45,7 +45,7 @@ class FoundryClient:
                     credential=DefaultAzureCredential(),
                 )
                 self._client = project.get_openai_client()
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 logger.error("foundry_auth_failed", error=str(e))
                 return None
 
@@ -75,8 +75,7 @@ class FoundryClient:
             self._failure_count = 0
             content = response.choices[0].message.content
             return {"status": "success", "result": content}
-        except Exception as e:
-            self._failure_count += 1
+        except Exception as e:  # noqa: BLE001
             if self._failure_count >= self._max_failures:
                 self._circuit_open = True
                 logger.error("circuit_breaker_tripped", failures=self._failure_count)

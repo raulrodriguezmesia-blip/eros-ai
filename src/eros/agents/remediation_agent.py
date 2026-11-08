@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from eros.agents.base import BaseAgent
 from eros.config.feature_flags import FeatureFlag, FeatureFlags
 from eros.models.schemas import Finding
@@ -7,7 +9,7 @@ class RemediationAgent(BaseAgent):
     name = "remediation_agent"
     description = "Generates code patches and PRs for detected vulnerabilities"
 
-    PATCH_TEMPLATES = {
+    PATCH_TEMPLATES: ClassVar[dict] = {
         "CWE-89": '''# Fix: Use parameterized query
 cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))''',
         "CWE-798": '''# Fix: Use environment variable

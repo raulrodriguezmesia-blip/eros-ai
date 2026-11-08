@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -23,11 +22,11 @@ class Finding(BaseModel):
     agent: str
     phase: str
     severity: Severity
-    cwe: Optional[str] = None
+    cwe: str | None = None
     description: str
-    line: Optional[int] = None
-    fix: Optional[str] = None
-    patch: Optional[str] = None
+    line: int | None = None
+    fix: str | None = None
+    patch: str | None = None
     # Contextual Risk Intelligence
     reachability: str = "Unknown"
     business_impact: str = "Unknown"
@@ -40,7 +39,7 @@ class Finding(BaseModel):
 class AnalysisRequest(BaseModel):
     code: str = Field(..., min_length=1, max_length=50_000)
     language: str = Field(default="python")
-    repo_url: Optional[str] = None
+    repo_url: str | None = None
 
 
 class AnalysisResult(BaseModel):
