@@ -41,7 +41,7 @@ class ArchitectureAgent(BaseAgent):
                 func_lines += 1
 
         # God class / too many imports
-        import_count = sum(1 for l in lines if re.match(r"^(import |from )", l.strip()))
+        import_count = sum(1 for ln in lines if re.match(r"^(import |from )", ln.strip()))
         if import_count > 15:
             findings.append(
                 Finding(

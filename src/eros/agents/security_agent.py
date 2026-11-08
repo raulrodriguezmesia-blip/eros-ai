@@ -2,7 +2,6 @@ import json
 import re
 
 from eros.agents.base import BaseAgent
-from eros.config.feature_flags import FeatureFlag, FeatureFlags
 from eros.foundry.client import foundry_client
 from eros.models.schemas import Finding, Severity
 

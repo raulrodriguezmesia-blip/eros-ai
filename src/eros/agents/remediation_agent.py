@@ -1,6 +1,6 @@
 from eros.agents.base import BaseAgent
 from eros.config.feature_flags import FeatureFlag, FeatureFlags
-from eros.models.schemas import Finding, Severity
+from eros.models.schemas import Finding
 
 
 class RemediationAgent(BaseAgent):
