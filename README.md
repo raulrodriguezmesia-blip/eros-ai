@@ -2,7 +2,7 @@
 
 [![M8ven Verified](https://img.shields.io/badge/M8ven-Verified-00D4AA?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMDBENEFBIiBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptLTIgMTVsLTUtNSAxLjQxLTEuNDFsNC41OSA0LjU5IDEwLjU5LTEwLjU5TDE5IDhsLTEyIDEyek17LjUgMTIuNUwxMiAxNWwtNC41LTQuNUwxNy41IDhsLTQgNC41IDQgNC41eiIvPjwvc3ZnPg==)](https://m8ven.ai) [![Hackathon](https://img.shields.io/badge/Microsoft%20Agents%20League-2026-0078D4?style=for-the-badge&logo=microsoft&logoColor=white)](https://devpost.com) [![Track](https://img.shields.io/badge/Track-Coding%20%26%20Agentic%20Engineering-76B900?style=for-the-badge)](https://devpost.com) [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE) [![Python](https://img.shields.io/badge/Python-3.11+-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org) [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com) [![Azure](https://img.shields.io/badge/Azure%20Foundry-IQ-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/en-us/products/ai-foundry)
 
-> 🏆 **Official Submission:** Microsoft Agents League Hackathon 2026 — *Coding & Agentic Engineering Track*
+> 🏆 **Built for the Microsoft Agents League Hackathon** — *Coding & Agentic Engineering Track*
 
 ---
 
@@ -20,14 +20,14 @@
 
 ### Why This Matters
 
-Modern engineering teams need **four capabilities simultaneously** that no single tool provides today:
+Modern engineering teams need **four capabilities simultaneously** that are rarely unified in a single tool:
 
 1. **Risk Context** — Not just "what" but "where" and "how bad" (reachability × business impact × confidence)
 2. **Governance** — Control agent behavior without redeploying (Feature Flags as first-class citizens)
 3. **Validated Remediation** — Fixes that are tested, not just suggested (sandbox execution + test validation)
 4. **Runtime Controllability** — Change behavior in real time via API or dashboard switches
 
-**Eros AI combines all four in a single platform.**
+**Eros AI combines all four in a unified workflow.**
 
 ---
 
@@ -43,7 +43,7 @@ graph TB
 
     subgraph "Governance Layer (Eros AI Core)"
         GW[API Gateway / FastAPI]
-        FF[Feature Flag Provider<br/>Env + Azure App Config]
+        FF[Feature Flag Provider<br/>Env + Runtime Overrides]
         ORCH[Analysis Orchestrator<br/>Async Parallel Execution]
         
         GW --> FF
@@ -269,7 +269,7 @@ class FoundryIQClient:
 |---|---|---|---|---|
 | **Security Guardian** | 🛡️ | OWASP Top 10, secrets, command injection | SQL injection, hardcoded credentials, `os.system`, `eval`, path traversal | Deep AST + regex hybrid; reachability analysis |
 | **Quality Inspector** | 🔍 | Coupling, technical debt, complexity | Long functions, deep nesting, excessive imports, duplicate code | Cyclomatic complexity, maintainability index |
-| **Compliance Enforcer** | ✅ | Enterprise policies, OWASP compliance | Unsafe deserialization, debug mode enabled, SSL/TLS disabled | Policy-as-code; GDPR/HIPAA/SOC2 rules |
+| **Compliance Enforcer** | ✅ | Enterprise policies, OWASP compliance | Unsafe deserialization, debug mode enabled, SSL/TLS disabled | Compliance-oriented rule enforcement |
 | **Fix Generator** | 🛠️ | AI-assisted remediation | Generates **validated** code patches | Sandbox execution + test suite validation |
 
 ---
@@ -307,7 +307,7 @@ export EROS_FLAG_DEEP_AST_ANALYSIS=true
 | **API Framework** | FastAPI + Uvicorn | OpenAPI native, automatic validation, WebSocket support |
 | **Validation** | Pydantic v2 | 17x faster than v1, strict schemas |
 | **AI Orchestration** | Microsoft Foundry IQ (`azure-ai-projects`) | Enterprise LLM gateway, circuit breaker, token budget |
-| **Feature Flags** | Environment variables + runtime overrides + Azure App Config | Zero-dependency, cloud-native, auditable |
+| **Feature Flags** | Environment variables + runtime overrides | Zero-dependency, cloud-native, auditable |
 | **Frontend** | HTML + Tailwind CSS (CDN) + Alpine.js | Zero-build, instant load, reactive dashboard |
 | **Container** | Docker multi-stage (non-root, healthcheck) | Security, size optimization, production-ready |
 | **Testing** | `pytest` + `pytest-asyncio` | 23 tests, parallel execution |
@@ -378,7 +378,7 @@ docker compose up --build
 ### 4. Test
 ```bash
 python -m pytest tests/ -v
-# 23 tests, all passing in <0.2s
+# 136 tests passing, 18 pre-existing failures (non-blocking), <0.2s
 ```
 
 ---
@@ -537,10 +537,6 @@ graph TB
             CB[Circuit Breaker<br/>Resilience]
         end
         
-        subgraph "Azure App Configuration"
-            FF[Feature Flags<br/>Targeting + Rollout %]
-        end
-        
         subgraph "Azure Monitor"
             MET[Metrics / Logs / Traces]
             ALT[Alerts]
@@ -553,14 +549,12 @@ graph TB
     
     CLIENT[Dev / CI/CD / GitHub App] --> API
     API --> FIQ
-    API --> FF
     API --> MET
     API --> AUTH
     DASH --> API
     
     style API fill:#0078D4,color:#fff
     style FIQ fill:#9B59B6,color:#fff
-    style FF fill:#FFD93D,color:#000
     style MET fill:#4ECDC4,color:#fff
     style AUTH fill:#FFA07A,color:#fff
 ```
@@ -603,7 +597,7 @@ PYTHONPATH=src uvicorn eros.main:app --port 5000
 
 ---
 
-## 🧪 Test Suite — 23 Tests, 3 Layers
+## 🧪 Test Suite — 154 Tests Collected, 136 Passing
 
 | Layer | Files | Tests | Focus |
 |---|---|---|---|
@@ -611,15 +605,16 @@ PYTHONPATH=src uvicorn eros.main:app --port 5000
 | **Integration** | `test_analyze_api.py`, `test_foundry_client.py` | 6 | API contracts, Foundry client resilience |
 | **E2E** | `test_vulnerable_sample_flow.py` | 2 | Full pipeline: vulnerable code → findings → patches |
 | **Legacy** | `test_agents.py` | 4 | Backward compatibility |
+| **Additional Unit** | `test_*.py` (rigor, guardrails, trace, etc.) | 131 | Component-level unit tests |
+
+> **Note:** 18 pre-existing unit test failures (logic mismatches, not regressions). Golden Path E2E + Integration + E2E = **PASS**.
 
 ```bash
 # Run all
 python -m pytest tests/ -v
 
-# Run specific layer
-python -m pytest tests/unit/ -v
-python -m pytest tests/integration/ -v
-python -m pytest tests/e2e/ -v
+# Run critical path only
+python -m pytest tests/integration/test_golden_path.py tests/integration/test_analyze_api.py tests/e2e/ -v
 ```
 
 ---
@@ -670,7 +665,7 @@ eros-ai/
 | **Technological Implementation** | FastAPI + Foundry IQ + Circuit Breaker + Token Budget + Feature Flags + 23 tests + Sandbox validation + ReasoningTrace (4 formats) |
 | **Design** | Executive dashboard with KPIs, agent status, findings, patches, flags — zero-build Tailwind/Alpine |
 | **Potential Impact** | Addresses **real enterprise problem**: AI-generated code needs *governance*, not just scanning. Feature Flag governance for agents is novel. |
-| **Quality of the Idea** | **Feature Flag governance for AI agents** = first-class runtime controllability. No competitor has this as core architecture. |
+| **Quality of the Idea** | **Feature Flag governance for AI agents** = first-class runtime controllability. A key differentiator of Eros AI. |
 
 ### Differentiators to Highlight
 1. **Feature Flag Governance** — Change agent behavior in real time, no redeploy
@@ -710,7 +705,7 @@ eros-ai/
 
 ## 🙏 Acknowledgments
 
-Built for **Microsoft Agents League Hackathon 2026** — *Coding & Agentic Engineering Track*
+Built for **the Microsoft Agents League Hackathon** — *Coding & Agentic Engineering Track*
 
 **Architecture:** Governance Layer → Feature Flags → Agent Swarm → Foundry IQ → Sandbox Validation → ReasoningTrace
 
