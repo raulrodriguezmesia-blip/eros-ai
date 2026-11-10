@@ -8,19 +8,16 @@ from __future__ import annotations
 import asyncio
 import random
 import time
-import statistics
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, UTC
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, List, Optional
 from collections import defaultdict
 
 from .rigor import get_rigor_mode, StressTestConfig
-from .agent_registry import AgentRegistry, AgentType, AgentStatus, get_registry
-from .confidence_gate import ConfidenceGate, get_confidence_gate, GateDecision
-from .reasoning_trace import ReasoningTrace, get_reasoning_trace, TraceEventType
+from .agent_registry import AgentStatus, get_registry
 
 logger = logging.getLogger(__name__)
 

@@ -15,7 +15,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, UTC
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 from contextvars import ContextVar
 
 from .rigor import get_rigor_mode, ReasoningTraceConfig

@@ -12,7 +12,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, UTC
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 import statistics
 
 from .rigor import get_rigor_mode, ConfidenceGateConfig
@@ -317,7 +317,7 @@ class ConfidenceGate:
             return self._config.thresholds.copy()
         
         # Analyze history to recommend thresholds
-        confidences = [h["confidence"] for h in self._threshold_history]
+        [h["confidence"] for h in self._threshold_history]
         allowed_conf = [h["confidence"] for h in self._threshold_history if h["allowed"]]
         rejected_conf = [h["confidence"] for h in self._threshold_history if not h["allowed"]]
         

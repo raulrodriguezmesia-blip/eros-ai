@@ -2,17 +2,14 @@
 Unit tests for ConfidenceGate component.
 """
 
-import asyncio
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import patch
 
 from eros import (
     ConfidenceGate,
     ConfidenceScore,
-    GateDecision,
     ConfidenceLevel,
     FallbackAction,
-    ConfidenceScorer,
     LLMSelfConsistencyScorer,
     ProbabilisticScorer,
     CalibrationModel,
@@ -243,7 +240,7 @@ class TestConfidenceGate:
         for _ in range(100):
             gate.add_calibration_sample(0.8, True)
         
-        decision = await gate.evaluate(
+        await gate.evaluate(
             {"query": "test"},
             context={"probabilities": [0.9, 0.05, 0.03, 0.01, 0.01]},
         )

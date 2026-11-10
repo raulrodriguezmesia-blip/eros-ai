@@ -2,9 +2,7 @@
 Unit tests for AgentRegistry component.
 """
 
-import asyncio
 import pytest
-from unittest.mock import AsyncMock, MagicMock
 
 from eros import (
     AgentRegistry,
@@ -13,7 +11,6 @@ from eros import (
     AgentStatus,
     HealthCheck,
     HTTPHealthCheck,
-    get_registry,
     close_registry,
 )
 
@@ -172,7 +169,7 @@ class TestAgentRegistry:
         
         # Register with failing health check
         failing_check = MockHealthCheck(should_pass=False)
-        agent_id = await registry.register(
+        await registry.register(
             "FailingAgent",
             AgentType.SENTRY,
             health_check=failing_check,

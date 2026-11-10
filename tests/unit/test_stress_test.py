@@ -1,10 +1,6 @@
-"""
-Unit tests for StressTest component.
-"""
-
 import asyncio
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import patch
 from datetime import datetime, UTC
 
 from eros import (
@@ -14,7 +10,6 @@ from eros import (
     StressTestConfig,
     FaultType,
     FaultInjector,
-    LoadGenerator,
     SimpleLoadGenerator,
     SLAThresholds,
     get_stress_test,

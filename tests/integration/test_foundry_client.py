@@ -1,5 +1,4 @@
 import pytest
-from unittest.mock import patch
 
 from eros.foundry.client import FoundryClient
 

@@ -5,7 +5,6 @@ Unit tests for ReasoningTrace component.
 import asyncio
 import json
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
 from datetime import datetime, UTC
 
 from eros import (
@@ -13,10 +12,8 @@ from eros import (
     TraceContext,
     TraceEvent,
     TraceEventType,
-    TraceStorage,
     MemoryTraceStorage,
     SQLiteTraceStorage,
-    TraceExporter,
     JSONExporter,
     MermaidExporter,
     OpenTelemetryExporter,
@@ -354,7 +351,7 @@ class TestReasoningTrace:
     @pytest.mark.asyncio
     async def test_add_event(self, trace):
         """Test adding events to current trace."""
-        ctx = trace.start_trace("agent-1")
+        trace.start_trace("agent-1")
         
         event = trace.add_event(
             TraceEventType.DECISION,
@@ -374,7 +371,7 @@ class TestReasoningTrace:
     async def test_depth_limit(self, trace):
         """Test max depth limit."""
         trace._config.max_depth = 2
-        ctx = trace.start_trace("agent-1")
+        trace.start_trace("agent-1")
         
         trace.add_event(TraceEventType.AGENT_START, agent_id="agent-1")
         trace.add_event(TraceEventType.DECISION, agent_id="agent-1")

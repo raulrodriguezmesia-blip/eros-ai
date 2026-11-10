@@ -15,15 +15,13 @@ from datetime import datetime, UTC
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 import argparse
-import signal
-import hashlib
 
 from eros.rigor import get_rigor_mode, CLISkillsConfig
-from eros.agent_registry import AgentRegistry, AgentType, AgentStatus, get_registry, close_registry
-from eros.confidence_gate import ConfidenceGate, get_confidence_gate, GateDecision, FallbackAction
+from eros.agent_registry import AgentRegistry, AgentType, get_registry, close_registry
+from eros.confidence_gate import ConfidenceGate, get_confidence_gate
 from eros.reasoning_trace import ReasoningTrace, get_reasoning_trace, TraceEventType
 from eros.stress_test import StressTest, get_stress_test, StressScenario
-from eros.safety_guardrails import SafetyGuardrails, get_safety_guardrails, GuardrailAction
+from eros.safety_guardrails import get_safety_guardrails
 
 logger = logging.getLogger(__name__)
 
@@ -386,7 +384,7 @@ class RigorCTL:
         print(f"Running benchmark: {scenario.value}...")
         result = await self._stress.run_scenario(scenario, default_target, custom_params)
         
-        print(f"\nResults:")
+        print("\nResults:")
         print(f"  Total requests: {result.total_requests}")
         print(f"  Successful: {result.successful_requests}")
         print(f"  Failed: {result.failed_requests}")
@@ -397,7 +395,7 @@ class RigorCTL:
         print(f"  Throughput: {result.throughput_rps:.1f} rps")
         
         if result.sla_violations:
-            print(f"\n  SLA Violations:")
+            print("\n  SLA Violations:")
             for v in result.sla_violations:
                 print(f"    - {v['metric']}: threshold={v['threshold']}, actual={v['actual']}")
         
@@ -560,7 +558,7 @@ class RigorCTL:
         gate = get_confidence_gate()
         trace = get_reasoning_trace()
         guardrails = get_safety_guardrails()
-        stress = get_stress_test()
+        get_stress_test()
         print("       All components initialized")
         print()
         

@@ -1,4 +1,4 @@
-from typing import ClassVar, Optional
+from typing import ClassVar
 
 from eros.agents.base import BaseAgent
 from eros.config.feature_flags import FeatureFlag, FeatureFlags

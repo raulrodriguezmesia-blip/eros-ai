@@ -12,11 +12,6 @@ from eros import (
     get_rigor_mode,
     reset_rigor_mode,
     AgentRegistryConfig,
-    ConfidenceGateConfig,
-    ReasoningTraceConfig,
-    StressTestConfig,
-    CLISkillsConfig,
-    SafetyGuardrailsConfig,
 )
 
 

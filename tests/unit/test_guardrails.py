@@ -2,14 +2,11 @@
 Unit tests for SafetyGuardrails component.
 """
 
-import asyncio
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
 
 from eros import (
     SafetyGuardrails,
     GuardrailRule,
-    GuardrailAction,
     GuardrailResult,
     PIIDetector,
     ToxicityDetector,

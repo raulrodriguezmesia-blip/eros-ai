@@ -7,7 +7,6 @@ This test validates that the entire aegis-lite architecture works as a cohesive 
 
 import asyncio
 import sys
-import json
 from pathlib import Path
 from datetime import datetime, UTC
 
@@ -24,13 +23,11 @@ from eros import (
     get_registry,
     close_registry,
     AgentType,
-    AgentStatus,
     get_confidence_gate,
     get_reasoning_trace,
     get_stress_test,
     get_safety_guardrails,
     TraceEventType,
-    FallbackAction,
     GuardrailAction,
     StressScenario,
     reset_rigor_mode,
@@ -379,7 +376,7 @@ async def run_integration_test():
     for r in results_3:
         if r.triggered:
             print_substep(f"  [BLOCKED] {r.rule_name}", f"category={r.category.value}, action={r.action.value}, conf={r.confidence:.2f}")
-            print_substep(f"    Details", str(r.details))
+            print_substep("    Details", str(r.details))
     
     trace.add_event(TraceEventType.DECISION, agent_id="pipeline", data={
         "final_allowed": False,
@@ -408,7 +405,7 @@ async def run_integration_test():
         if r.triggered:
             print_substep(f"  [BLOCK] {r.rule_name}", f"category={r.category.value}, action={r.action.value}")
             if "matches" in r.details:
-                print_substep(f"    Matches", str(r.details["matches"][:3]))
+                print_substep("    Matches", str(r.details["matches"][:3]))
     
     # ============================================================
     # STEP 4: Stress Test
