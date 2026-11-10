@@ -1,0 +1,168 @@
+"""
+aegis-lite - Hybrid Intelligence Control Plane
+Edge (Sentry) → Confidence Router → Cloud (War Room) → Deterministic Safety Guardrails → Reasoning Trace (XAI) + Stress Test
+"""
+
+from .rigor import (
+    RigorMode,
+    RigorConfig,
+    AgentRegistryConfig,
+    ConfidenceGateConfig,
+    ReasoningTraceConfig,
+    StressTestConfig,
+    CLISkillsConfig,
+    SafetyGuardrailsConfig,
+    get_rigor_mode,
+    set_rigor_mode,
+    reset_rigor_mode,
+)
+
+from .agent_registry import (
+    AgentRegistry,
+    AgentMetadata,
+    AgentType,
+    AgentStatus,
+    HealthCheck,
+    HTTPHealthCheck,
+    get_registry,
+    close_registry,
+)
+
+from .confidence_gate import (
+    ConfidenceGate,
+    ConfidenceScore,
+    GateDecision,
+    ConfidenceLevel,
+    FallbackAction,
+    ConfidenceScorer,
+    LLMSelfConsistencyScorer,
+    ProbabilisticScorer,
+    CalibrationModel,
+    get_confidence_gate,
+    set_confidence_gate,
+)
+
+from .reasoning_trace import (
+    ReasoningTrace,
+    TraceContext,
+    TraceEvent,
+    TraceEventType,
+    TraceStorage,
+    MemoryTraceStorage,
+    SQLiteTraceStorage,
+    TraceExporter,
+    JSONExporter,
+    MermaidExporter,
+    OpenTelemetryExporter,
+    JaegerExporter,
+    get_reasoning_trace,
+    set_reasoning_trace,
+    traced,
+)
+
+from .stress_test import (
+    StressTest,
+    StressResult,
+    StressScenario,
+    FaultType,
+    FaultInjector,
+    LoadGenerator,
+    SimpleLoadGenerator,
+    SLAThresholds,
+    get_stress_test,
+    set_stress_test,
+)
+
+from .safety_guardrails import (
+    SafetyGuardrails,
+    GuardrailRule,
+    GuardrailAction,
+    GuardrailResult,
+    GuardrailCategory,
+    PIIDetector,
+    ToxicityDetector,
+    PromptInjectionDetector,
+    HallucinationDetector,
+    BiasDetector,
+    CopyrightDetector,
+    get_safety_guardrails,
+    set_safety_guardrails,
+)
+
+__version__ = "0.1.0"
+__all__ = [
+    # Rigor
+    "RigorMode",
+    "RigorConfig",
+    "AgentRegistryConfig",
+    "ConfidenceGateConfig",
+    "ReasoningTraceConfig",
+    "StressTestConfig",
+    "CLISkillsConfig",
+    "SafetyGuardrailsConfig",
+    "get_rigor_mode",
+    "set_rigor_mode",
+    "reset_rigor_mode",
+    # Agent Registry
+    "AgentRegistry",
+    "AgentMetadata",
+    "AgentType",
+    "AgentStatus",
+    "HealthCheck",
+    "HTTPHealthCheck",
+    "get_registry",
+    "close_registry",
+    # Confidence Gate
+    "ConfidenceGate",
+    "ConfidenceScore",
+    "GateDecision",
+    "ConfidenceLevel",
+    "FallbackAction",
+    "ConfidenceScorer",
+    "LLMSelfConsistencyScorer",
+    "ProbabilisticScorer",
+    "CalibrationModel",
+    "get_confidence_gate",
+    "set_confidence_gate",
+    # Reasoning Trace
+    "ReasoningTrace",
+    "TraceContext",
+    "TraceEvent",
+    "TraceEventType",
+    "TraceStorage",
+    "MemoryTraceStorage",
+    "SQLiteTraceStorage",
+    "TraceExporter",
+    "JSONExporter",
+    "MermaidExporter",
+    "OpenTelemetryExporter",
+    "JaegerExporter",
+    "get_reasoning_trace",
+    "set_reasoning_trace",
+    "traced",
+    # Stress Test
+    "StressTest",
+    "StressResult",
+    "StressScenario",
+    "FaultType",
+    "FaultInjector",
+    "LoadGenerator",
+    "SimpleLoadGenerator",
+    "SLAThresholds",
+    "get_stress_test",
+    "set_stress_test",
+    # Safety Guardrails
+    "SafetyGuardrails",
+    "GuardrailRule",
+    "GuardrailAction",
+    "GuardrailResult",
+    "GuardrailCategory",
+    "PIIDetector",
+    "ToxicityDetector",
+    "PromptInjectionDetector",
+    "HallucinationDetector",
+    "BiasDetector",
+    "CopyrightDetector",
+    "get_safety_guardrails",
+    "set_safety_guardrails",
+]
