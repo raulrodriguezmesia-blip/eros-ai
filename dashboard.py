@@ -6,8 +6,6 @@ Streamlit-based visual dashboard for monitoring the hybrid intelligence pipeline
 import asyncio
 import streamlit as st
 import plotly.graph_objects as go
-import plotly.express as px
-from datetime import datetime, timedelta
 import random
 import sys
 from pathlib import Path
@@ -22,8 +20,6 @@ from eros import (
     get_reasoning_trace,
     get_stress_test,
     get_safety_guardrails,
-    AgentType,
-    TraceEventType,
 )
 
 # Page config
@@ -101,7 +97,7 @@ def render_metrics_row(registry, gate, trace, guardrails, stress):
     """Render top metrics row."""
     registry_stats = registry.get_stats()
     trace_stats = trace.get_stats()
-    stress_summary = stress.get_summary()
+    stress.get_summary()
     
     col1, col2, col3, col4, col5 = st.columns(5)
     
@@ -203,7 +199,7 @@ def render_agent_registry(registry):
                 "Endpoint": a.endpoint or "N/A",
             })
         
-        df = st.dataframe(
+        st.dataframe(
             data,
             use_container_width=True,
             hide_index=True,
