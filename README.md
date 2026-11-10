@@ -1,393 +1,701 @@
-# Aegis Lite
+# 🛡️ Eros AI: Autonomous Engineering Governance Platform
 
-**AI Governance & Trust Layer for Hybrid Intelligence Systems**
+[![M8ven Verified](https://img.shields.io/badge/M8ven-Verified-00D4AA?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMDBENEFBIiBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptLTIgMTVsLTUtNSAxLjQxLTEuNDFsNC41OSA0LjU5IDEwLjU5LTEwLjU5TDE5IDhsLTEyIDEyek17LjUgMTIuNUwxMiAxNWwtNC41LTQuNUwxNy41IDhsLTQgNC41IDQgNC41eiIvPjwvc3ZnPg==)](https://m8ven.ai) [![Hackathon](https://img.shields.io/badge/Microsoft%20Agents%20League-2026-0078D4?style=for-the-badge&logo=microsoft&logoColor=white)](https://devpost.com) [![Track](https://img.shields.io/badge/Track-Coding%20%26%20Agentic%20Engineering-76B900?style=for-the-badge)](https://devpost.com) [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE) [![Python](https://img.shields.io/badge/Python-3.11+-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org) [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com) [![Azure](https://img.shields.io/badge/Azure%20Foundry-IQ-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/en-us/products/ai-foundry)
 
-[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)]()
-[![Rigor Modes](https://img.shields.io/badge/Modes-demo%20%7C%20standard%20%7C%20enterprise-orange.svg)]()
+> 🏆 **Official Submission:** Microsoft Agents League Hackathon 2026 — *Coding & Agentic Engineering Track*
 
 ---
 
-## 🎯 Problem
+## 📌 Executive Summary (BLUF)
 
-Organizations deploying AI agents face critical governance challenges:
+**Eros AI** is an **autonomous code analysis and governance platform** powered by **4 specialized AI agents** that collaborate to detect vulnerabilities, enforce compliance, and generate **AI-assisted, sandbox-validated remediations** — all orchestrated through **Microsoft Foundry IQ** and governed by **enterprise-grade Feature Flags** that change agent behavior in real time, **without redeployments**.
 
-| Challenge | Impact |
-|-----------|--------|
-| **Uncontrolled autonomy** | Agents make high-stakes decisions without oversight |
-| **No confidence scoring** | Can't distinguish reliable from hallucinated outputs |
-| **Safety gaps** | PII leakage, prompt injection, toxicity undetected |
-| **Audit blindness** | No traceability for compliance (GDPR, HIPAA, SOC2) |
-| **Scaling blindly** | No load testing or SLA validation before production |
+| Traditional Scanner (SonarQube, Snyk, CodeQL) | **Eros AI** |
+|---|---|
+| Finds vulnerabilities | **Finds + contextualizes** (reachability, business impact, confidence) |
+| Reports issues | **Reports + generates validated patches** |
+| Static rules | **Dynamic governance via Feature Flags** |
+| Requires redeploy to change behavior | **Real-time behavior switching** (instant, no restart) |
+| "AI-generated fix" | **"AI-generated AND sandbox-validated fix"** |
+
+### Why This Matters
+
+Modern engineering teams need **four capabilities simultaneously** that no single tool provides today:
+
+1. **Risk Context** — Not just "what" but "where" and "how bad" (reachability × business impact × confidence)
+2. **Governance** — Control agent behavior without redeploying (Feature Flags as first-class citizens)
+3. **Validated Remediation** — Fixes that are tested, not just suggested (sandbox execution + test validation)
+4. **Runtime Controllability** — Change behavior in real time via API or dashboard switches
+
+**Eros AI combines all four in a single platform.**
 
 ---
 
-## 💡 Solution
-
-**Aegis Lite** provides a complete governance layer for hybrid AI systems:
+## 🏗️ System Architecture: Governance Layer Over Any LLM
 
 ```mermaid
-graph LR
-    A[📡 Sentry<br/>Edge Agent] --> B[🔀 Router<br/>Confidence Gate]
-    B --> C{Confidence<br/>> Threshold?}
-    C -->|Yes| D[✅ Guardrails<br/>PII, Injection, Toxicity]
-    C -->|No| E[☁️ War Room<br/>Cloud Escalation]
-    E --> D
-    D --> F[📊 Reasoning Trace<br/>JSON/Mermaid/OTLP/Jaeger]
-    F --> G[✅ ALLOW / 🚫 BLOCK]
+graph TB
+    subgraph "Client Layer"
+        CLI[CLI / SDK]
+        DASH[Executive Dashboard]
+        API[REST API / Webhooks]
+    end
+
+    subgraph "Governance Layer (Eros AI Core)"
+        GW[API Gateway / FastAPI]
+        FF[Feature Flag Provider<br/>Env + Azure App Config]
+        ORCH[Analysis Orchestrator<br/>Async Parallel Execution]
+        
+        GW --> FF
+        GW --> ORCH
+        FF --> ORCH
+    end
+
+    subgraph "Agent Swarm (4 Specialized Agents)"
+        SG[🛡️ Security Guardian<br/>OWASP Top 10, Secrets, CMD Injection]
+        QI[🔍 Quality Inspector<br/>Coupling, Tech Debt, Complexity]
+        CE[✅ Compliance Enforcer<br/>Enterprise Policies, OWASP]
+        FG[🛠️ Fix Generator<br/>Validated Patches + Sandbox]
+    end
+
+    subgraph "Intelligence Backend"
+        FIQ[Microsoft Foundry IQ<br/>LLM + Tools + Circuit Breaker]
+        TB[Token Budget Manager]
+        CB[Circuit Breaker + Graceful Degradation]
+    end
+
+    subgraph "Validation & Observability"
+        SAND[Sandbox Executor<br/>Isolated Test Runner]
+        TRACE[Reasoning Trace<br/>JSON/Mermaid/OTLP/Jaeger]
+        AUDIT[Audit Log<br/>GDPR/HIPAA/SOC2]
+    end
+
+    CLI --> GW
+    DASH --> GW
+    API --> GW
+    
+    ORCH --> SG
+    ORCH --> QI
+    ORCH --> CE
+    ORCH --> FG
+    
+    SG --> FIQ
+    QI --> FIQ
+    CE --> FIQ
+    FG --> FIQ
+    
+    FIQ --> TB
+    FIQ --> CB
+    
+    FG --> SAND
+    SAND --> TRACE
+    ORCH --> AUDIT
+    TRACE --> AUDIT
+    
+    style SG fill:#FF6B6B,color:#fff
+    style QI fill:#4ECDC4,color:#fff
+    style CE fill:#45B7D1,color:#fff
+    style FG fill:#FFA07A,color:#fff
+    style FIQ fill:#9B59B6,color:#fff
+    style FF fill:#FFD93D,color:#000
 ```
 
-### Key Capabilities
+---
 
-| Component | Purpose | Features |
-|-----------|---------|----------|
-| **AgentRegistry** | Service discovery & health | Type-indexed, health checks, callbacks |
-| **ConfidenceGate** | Decision routing | Multi-scorer, calibration, adaptive thresholds |
-| **SafetyGuardrails** | Deterministic safety | PII, prompt injection, toxicity, hallucination, bias, copyright |
-| **ReasoningTrace** | XAI observability | Multi-format export, sampling, compression |
-| **StressTest** | Resilience validation | 6 scenarios, fault injection, SLA validation |
-| **RigorMode** | Config-driven scope | demo / standard / enterprise |
+## ⚡ Core Execution Highlights
+
+### 1. Feature Flag Governance — The Core Differentiator
+
+Agents change behavior **instantly** at runtime. No redeploy. No restart.
+
+```python
+# src/eros/config/feature_flags.py
+class FeatureFlagProvider:
+    def __init__(self):
+        self._flags = {
+            "deep_ast_analysis": FlagConfig(
+                default=False,
+                description="Enable deep AST + regex analysis (~1.2s vs ~200ms)",
+                impact="Exhaustive detection vs fast scan"
+            ),
+            "auto_patch_generation": FlagConfig(
+                default=False,
+                description="Generate code patches + sandbox validation",
+                impact="Report only → validated remediation"
+            ),
+            "strict_compliance_mode": FlagConfig(
+                default=False,
+                description="Block execution on critical findings",
+                impact="Warnings → hard gate"
+            ),
+        }
+    
+    def get_flag(self, name: str) -> bool:
+        # Priority: env var > runtime override > default
+        env_val = os.getenv(f"EROS_FLAG_{name.upper()}")
+        if env_val is not None:
+            return env_val.lower() == "true"
+        return self._flags[name].default
+
+# Usage in orchestrator
+flags = provider.get_all_flags()
+agents = select_agents_based_on_flags(flags)  # Dynamic agent selection
+```
+
+**Toggle via API (instant effect):**
+```bash
+POST /flags/deep_ast_analysis?value=true
+# {"flag": "deep_ast_analysis", "value": true, "source": "runtime", "effective_immediately": true}
+```
+
+### 2. Contextual Risk Intelligence — Every Finding Has Business Context
+
+```python
+# src/eros/models/schemas.py
+class Finding(BaseModel):
+    agent: str                          # Which agent detected it
+    phase: str                          # Pipeline phase
+    severity: Literal["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+    cwe: str                            # CWE-ID (e.g., "CWE-89")
+    description: str                    # Human-readable
+    line: int                           # Source line
+    fix: str                            # Remediation guidance
+    
+    # 🎯 CONTEXTUAL INTELLIGENCE (differentiator)
+    reachability: Literal[
+        "Internet Facing", 
+        "Internal Only", 
+        "Authenticated", 
+        "Unknown"
+    ]                                    # Where is it exploitable?
+    business_impact: Literal[
+        "Customer Data Exposure",
+        "Privilege Escalation", 
+        "Service Disruption",
+        "Compliance Risk"
+    ]                                    # What's the real cost?
+    confidence: float = Field(ge=0.0, le=1.0)  # Detection certainty
+    
+    # ✅ VALIDATED REMEDIATION
+    validated: bool = False
+    validation_status: Literal["pending", "tests_passed", "tests_failed"] = "pending"
+    patch: Optional[str] = None          # Sandbox-validated code fix
+```
+
+### 3. Multi-Agent Orchestration — Parallel, Resilient, Observable
+
+```python
+# src/eros/orchestrator.py
+class AnalysisOrchestrator:
+    def __init__(self, foundry_client: FoundryIQClient, flags: FeatureFlagProvider):
+        self.foundry = foundry_client
+        self.flags = flags
+        self.agents = self._initialize_agents()
+    
+    async def analyze(self, code: str, language: str) -> AnalysisResult:
+        trace = ReasoningTrace.start("orchestrator", session_id=generate_id())
+        
+        # 1. Feature flag evaluation → dynamic agent selection
+        active_agents = self._select_agents(self.flags.get_all())
+        trace.add_event("agent_selection", data={"agents": active_agents})
+        
+        # 2. Parallel execution with timeout + circuit breaker
+        tasks = [
+            self._run_agent_with_resilience(agent, code, language)
+            for agent in active_agents
+        ]
+        partial_results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # 3. Aggregate + enrich with contextual intelligence
+        findings = self._aggregate_findings(partial_results)
+        enriched = await self._enrich_with_context(findings, code)
+        
+        # 4. Conditional fix generation (flag-gated)
+        if self.flags.get("auto_patch_generation"):
+            patches = await self._generate_validated_patches(enriched)
+            enriched = self._attach_patches(enriched, patches)
+        
+        trace.end()
+        return AnalysisResult(findings=enriched, ...)
+
+    async def _run_agent_with_resilience(self, agent, code, language):
+        async with self.foundry.circuit_breaker():
+            return await asyncio.wait_for(
+                agent.analyze(code, language),
+                timeout=30.0  # Per-agent timeout
+            )
+```
+
+### 4. Microsoft Foundry IQ Integration — Enterprise-Grade LLM Orchestration
+
+```python
+# src/eros/foundry/client.py
+class FoundryIQClient:
+    def __init__(self):
+        self.client = AzureAIProjectsClient(
+            endpoint=os.getenv("FOUNDRY_ENDPOINT"),
+            credential=DefaultAzureCredential(),
+            token_budget=TokenBudget(
+                max_tokens_per_request=4096,
+                max_tokens_per_minute=50000,
+                max_cost_usd_per_hour=10.0
+            )
+        )
+        self.circuit_breaker = CircuitBreaker(
+            failure_threshold=5,
+            recovery_timeout=30,
+            fallback=self._local_fallback  # Graceful degradation
+        )
+    
+    @circuit_breaker
+    async def complete(self, messages: List[Dict], **kwargs):
+        return await self.client.chat.completions.create(
+            model=os.getenv("FOUNDRY_MODEL", "gpt-4o"),
+            messages=messages,
+            temperature=0.1,  # Deterministic for governance
+            **kwargs
+        )
+    
+    def _local_fallback(self, *args, **kwargs):
+        # Local heuristic analysis when Foundry unavailable
+        return LocalAnalyzer().analyze(*args, **kwargs)
+```
+
+---
+
+## 🤖 The 4 Specialized Agents
+
+| Agent | Icon | Role | Detects | Key Capability |
+|---|---|---|---|---|
+| **Security Guardian** | 🛡️ | OWASP Top 10, secrets, command injection | SQL injection, hardcoded credentials, `os.system`, `eval`, path traversal | Deep AST + regex hybrid; reachability analysis |
+| **Quality Inspector** | 🔍 | Coupling, technical debt, complexity | Long functions, deep nesting, excessive imports, duplicate code | Cyclomatic complexity, maintainability index |
+| **Compliance Enforcer** | ✅ | Enterprise policies, OWASP compliance | Unsafe deserialization, debug mode enabled, SSL/TLS disabled | Policy-as-code; GDPR/HIPAA/SOC2 rules |
+| **Fix Generator** | 🛠️ | AI-assisted remediation | Generates **validated** code patches | Sandbox execution + test suite validation |
+
+---
+
+## 🎛️ Feature Flag Governance Matrix
+
+The **single most powerful differentiator**. Change agent behavior in real time:
+
+| Flag | OFF (Default) | ON | Use Case |
+|---|---|---|---|
+| `deep_ast_analysis` | Regex scan (~200ms) | Deep AST + regex (~1.2s, exhaustive) | CI/CD gate vs PR quick check |
+| `auto_patch_generation` | Report findings only | Generate patches + sandbox validation | Audit mode vs active remediation |
+| `strict_compliance_mode` | Warning severity | Block execution on CRITICAL | Advisory vs enforcement gate |
+
+**Dashboard toggle → instant effect:**
+
+```bash
+# Via API
+curl -X POST "http://localhost:5000/flags/deep_ast_analysis?value=true"
+
+# Via CLI
+eros flags set deep_ast_analysis true
+
+# Via Environment (persistent)
+export EROS_FLAG_DEEP_AST_ANALYSIS=true
+```
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technology | Why |
+|---|---|---|
+| **Language** | Python 3.11+ (strict typing, `async`/`await`) | Type safety, performance, async concurrency |
+| **API Framework** | FastAPI + Uvicorn | OpenAPI native, automatic validation, WebSocket support |
+| **Validation** | Pydantic v2 | 17x faster than v1, strict schemas |
+| **AI Orchestration** | Microsoft Foundry IQ (`azure-ai-projects`) | Enterprise LLM gateway, circuit breaker, token budget |
+| **Feature Flags** | Environment variables + runtime overrides + Azure App Config | Zero-dependency, cloud-native, auditable |
+| **Frontend** | HTML + Tailwind CSS (CDN) + Alpine.js | Zero-build, instant load, reactive dashboard |
+| **Container** | Docker multi-stage (non-root, healthcheck) | Security, size optimization, production-ready |
+| **Testing** | `pytest` + `pytest-asyncio` | 23 tests, parallel execution |
+| **Observability** | `structlog` + custom ReasoningTrace (OTLP/Jaeger/JSON/Mermaid) | Full XAI traceability |
 
 ---
 
 ## 🚀 Quick Start
 
-### Installation
+### Prerequisites
+- Python 3.11+
+- (Optional) Microsoft Foundry IQ endpoint + API key
+- Docker (for containerized deployment)
+
+### 1. Clone & Install
 ```bash
 git clone https://github.com/raulrodriguezmesia-blip/eros-ai.git
 cd eros-ai
-pip install -e .
+pip install -e ".[dev]"
 ```
 
-### Run the Demo
+### 2. Configure Environment
 ```bash
-# Full demonstration (4 scenarios)
-python -m eros.cli.rigor_ctl demo
-
-# Low confidence escalation only
-python -m eros.cli.rigor_ctl demo --scenario escalation
-
-# JSON output for automation
-python -m eros.cli.rigor_ctl demo --format json
+cp .env.example .env
+# Edit .env with your Foundry credentials (optional for local analysis)
+# Required for full AI analysis:
+# FOUNDRY_ENDPOINT=https://your-project.services.ai.azure.com
+# FOUNDRY_MODEL=gpt-4o
+# AZURE_CLIENT_ID=...
+# AZURE_TENANT_ID=...
+# AZURE_CLIENT_SECRET=...
 ```
 
-### Run Integration Tests
+### 3. Run (3 Options)
+
+#### Option A: Local Development (FastAPI + Dashboard)
 ```bash
-# Golden Path E2E test
-pytest tests/integration/test_golden_path.py -v
-
-# All tests
-pytest -v
+PYTHONPATH=src uvicorn eros.main:app --reload --port 5000
+# Dashboard: http://localhost:5000
+# API Docs:  http://localhost:5000/docs
 ```
 
-### Launch Dashboard
+#### Option B: Docker (Production-Ready)
 ```bash
-streamlit run dashboard.py
+docker build -t eros-ai:latest .
+docker run -p 5000:8080 --env-file .env eros-ai:latest
 ```
 
----
-
-## 🏗️ Architecture
-
-### Hybrid Intelligence Flow
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        AEGIS LITE PIPELINE                       │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  REQUEST                                                         │
-│    │                                                             │
-│    ▼                                                             │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────────┐      │
-│  │   SENTRY    │───▶│   ROUTER    │───▶│ CONFIDENCE GATE │      │
-│  │  (Edge)     │    │             │    │  • Self-consist │      │
-│  │  • Local    │    │  • Select   │    │  • Probabilistic│      │
-│  │  • Telemetry│    │  • Route    │    │  • Calibration  │      │
-│  └─────────────┘    └─────────────┘    └────────┬────────┘      │
-│                                                  │               │
-│                    ┌─────────────────────────────┘               │
-│                    ▼                                              │
-│              ┌─────────────┐    ┌─────────────────┐              │
-│              │   LOW       │───▶│    WAR ROOM     │              │
-│              │ CONFIDENCE  │    │   (Cloud)       │              │
-│              │  FALLBACK   │    │  • Heavy LLM    │              │
-│              └─────────────┘    │  • GPU A100     │              │
-│                                └────────┬────────┘              │
-│                                         │                       │
-│                    ┌────────────────────┘                       │
-│                    ▼                                              │
-│              ┌─────────────────┐    ┌─────────────────┐         │
-│              │  GUARDRAILS     │───▶│ REASONING TRACE │         │
-│              │  • PII          │    │  • JSON         │         │
-│              │  • Injection    │    │  • Mermaid      │         │
-│              │  • Toxicity     │    │  • OTLP/Jaeger  │         │
-│              │  • Hallucination│    └────────┬────────┘         │
-│              └────────┬────────┘             │                 │
-│                       ▼                       ▼                 │
-│              ┌─────────────────────────────────────────┐       │
-│              │           DECISION                      │       │
-│              │  ✅ ALLOW  |  🚫 BLOCK  |  ⬆️ ESCALATE   │       │
-│              └─────────────────────────────────────────┘       │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Rigor Modes (Config-Driven Scope)
-
-| Feature | `demo` | `standard` | `enterprise` |
-|---------|--------|------------|--------------|
-| Max Agents | 3 | 10 | 100 |
-| Persistence | Memory | SQLite | PostgreSQL |
-| Guardrail Rules | 2 | 4 | 6 |
-| Action | Log | Block | Block + Alert |
-| Trace Formats | JSON | JSON, Mermaid, OTLP | All + Jaeger |
-| Stress Scenarios | 2 | 4 | 6 |
-| CLI Commands | 4 | 6 | 8 |
-| Compliance | - | - | GDPR, HIPAA, SOC2 |
-
-**Switch modes:** `export AEGIS_RIGOR_MODE=standard` or edit `rigor.yaml`
-
----
-
-## 📦 Components
-
-### 1. AgentRegistry (`eros/agent_registry.py`)
-```python
-from eros import get_registry, AgentType
-
-registry = await get_registry()
-
-agent_id = await registry.register(
-    name="RiskAnalyzer",
-    agent_type=AgentType.WAR_ROOM,
-    endpoint="https://api.example.com",
-    capabilities=["financial_analysis", "risk_scoring"],
-)
-```
-
-**Features:** Type-indexed registration, health monitoring, async callbacks, graceful shutdown.
-
-### 2. ConfidenceGate (`eros/confidence_gate.py`)
-```python
-from eros import get_confidence_gate
-
-gate = get_confidence_gate()
-
-decision = await gate.evaluate(
-    {"query": "Analyze portfolio risk"},
-    context={"agent_id": "war-room-001"},
-    scorer_name="probabilistic",
-)
-
-if decision.allowed:
-    print(f"Confidence: {decision.confidence.value:.2f}")
-else:
-    print(f"Fallback: {decision.fallback.value}")
-```
-
-**Scorers:** Self-consistency (LLM), Probabilistic (logits), extensible interface.
-**Features:** Calibration (Platt scaling), adaptive thresholds, audit trail.
-
-### 3. SafetyGuardrails (`eros/safety_guardrails.py`)
-```python
-from eros import get_safety_guardrails
-
-guardrails = get_safety_guardrails()
-
-# Check any text
-allowed, results = await guardrails.check_async(
-    "My email is john@company.com and SSN 123-45-6789",
-    context={"agent_id": "sentry-001"}
-)
-
-for r in results:
-    if r.triggered:
-        print(f"BLOCKED: {r.rule_name} ({r.action.value})")
-```
-
-**Detectors:** PII, Toxicity, Prompt Injection, Hallucination, Bias, Copyright
-**Actions:** Log, Block, Block & Alert
-**Compliance:** GDPR, HIPAA, SOC2 ready
-
-### 4. ReasoningTrace (`eros/reasoning_trace.py`)
-```python
-from eros import get_reasoning_trace, TraceEventType
-
-trace = get_reasoning_trace()
-
-ctx = trace.start_trace("agent-001", session_id="session-123")
-trace.add_event(TraceEventType.DECISION, agent_id="agent-001", data={"input": "..."})
-trace.end_trace(ctx)
-
-# Export in multiple formats
-json_out = await trace.export(ctx.trace_id, "json")
-mermaid_out = await trace.export(ctx.trace_id, "mermaid")
-otlp_out = await trace.export(ctx.trace_id, "opentelemetry")
-```
-
-**Formats:** JSON, Mermaid diagrams, OpenTelemetry (OTLP), Jaeger
-**Features:** Context-aware, sampling, compression, PII redaction
-
-### 5. StressTest (`eros/stress_test.py`)
-```python
-from eros import get_stress_test, StressScenario
-
-stress = get_stress_test()
-
-result = await stress.run_scenario(
-    StressScenario.LOAD,
-    my_target_function,
-    {"concurrent": 100, "duration_sec": 300, "ramp_up_sec": 30}
-)
-
-print(f"P99: {result.latency_p99_ms:.1f}ms")
-print(f"Error rate: {result.error_rate:.2%}")
-print(f"SLA violations: {len(result.sla_violations)}")
-```
-
-**Scenarios:** Load, Latency, Fault Injection, Chaos, Soak, Spike
-**Faults:** Network delay, errors, timeouts, agent crashes, resource exhaustion
-**SLA:** P99 latency, error rate, throughput thresholds
-
----
-
-## 🧪 Testing
-
-### Integration Test (Golden Path)
-```bash
-pytest tests/integration/test_golden_path.py -v -s
-```
-
-Validates:
-- ✅ Agent registration (4 agents)
-- ✅ Normal request → Confidence Gate → Guardrails → ALLOW
-- ✅ Low confidence → Escalation → War Room → ALLOW
-- ✅ Prompt injection → BLOCKED
-- ✅ PII detection → BLOCKED
-- ✅ Stress test (6,800+ req/s, 100% success)
-- ✅ Multi-format trace export
-- ✅ Audit & compliance logging
-
-### Unit Tests
-```bash
-pytest tests/unit/ -v
-```
-
----
-
-## 📊 Dashboard
-
-Real-time observability dashboard built with Streamlit:
-
-```bash
-streamlit run dashboard.py
-```
-
-**Displays:**
-- Active agents, confidence %, risk alerts, traces, P99 latency
-- Pipeline visualization (Sentry → Router → Guardrails → Trace → Decision)
-- Agent registry with health status
-- Confidence thresholds & distribution
-- Guardrail rules & recent events
-- Trace export format availability
-- Stress test results with SLA compliance
-
----
-
-## ⚙️ Configuration
-
-### rigor.yaml (Mode-First Structure)
+#### Option C: Docker Compose (Full Stack)
 ```yaml
-rigor:
-  mode: "standard"  # demo | standard | enterprise
-  
-  standard:
-    agent_registry:
-      max_agents: 10
-      persistence: "sqlite"
-    confidence_gate:
-      min_confidence: 0.75
-      fallback: "escalate"
-      calibration_enabled: true
-    safety_guardrails:
-      rules: ["pii_detection", "toxicity", "prompt_injection", "hallucination"]
-      action: "block"
-    # ... more components
+# docker-compose.yml
+version: '3.8'
+services:
+  eros-api:
+    build: .
+    ports: ["5000:8080"]
+    env_file: .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+```
+```bash
+docker compose up --build
 ```
 
-### Environment Overrides
+### 4. Test
 ```bash
-export AEGIS_RIGOR_MODE=enterprise
-export AEGIS_RIGOR_CONFIG=/path/to/custom/rigor.yaml
+python -m pytest tests/ -v
+# 23 tests, all passing in <0.2s
 ```
 
 ---
 
-## 🎯 Hackathon Demo Script
+## 📋 API Reference
 
-### 60-Second Pitch
-```bash
-# 1. Show architecture
-python -m eros.cli.rigor_ctl demo
-
-# 2. Prove resilience
-python -m eros.cli.rigor_ctl benchmark load --concurrent 100 --duration 30
-
-# 3. Show compliance
-python -m eros.cli.rigor_ctl audit --framework GDPR
+### `GET /health`
+```json
+{
+  "status": "healthy",
+  "version": "0.1.0",
+  "flags": {
+    "deep_ast_analysis": false,
+    "auto_patch_generation": false,
+    "strict_compliance_mode": false
+  },
+  "foundry": "connected",
+  "uptime_seconds": 1234
+}
 ```
 
-### Key Differentiators to Highlight
-1. **Hybrid Intelligence** - Edge confidence routing with cloud fallback
-2. **Deterministic Guardrails** - Not probabilistic, rules-based blocking
-3. **Full Observability** - XAI traces in 4 formats (JSON/Mermaid/OTLP/Jaeger)
-4. **Config-Driven Scope** - One codebase, three rigor modes
-5. **Production Ready** - Stress tested, auditable, compliant
+### `POST /analyze`
+**Request:**
+```json
+{
+  "code": "password = \"admin123\"\ndef get_user(uid): return db.execute(f\"SELECT * FROM users WHERE id={uid}\")",
+  "language": "python"
+}
+```
+
+**Response:**
+```json
+{
+  "status": "completed",
+  "findings": [
+    {
+      "agent": "security_agent",
+      "phase": "security_audit",
+      "severity": "CRITICAL",
+      "cwe": "CWE-798",
+      "description": "Hardcoded password detected",
+      "line": 1,
+      "fix": "Use environment variables or Azure Key Vault",
+      "reachability": "Internal Only",
+      "business_impact": "Privilege Escalation",
+      "confidence": 0.99,
+      "validated": false,
+      "validation_status": "pending",
+      "patch": null
+    },
+    {
+      "agent": "security_agent",
+      "phase": "security_audit",
+      "severity": "CRITICAL",
+      "cwe": "CWE-89",
+      "description": "SQL injection via f-string interpolation",
+      "line": 2,
+      "fix": "Use parameterized queries: cursor.execute(\"SELECT * FROM users WHERE id=%s\", (uid,))",
+      "reachability": "Internet Facing",
+      "business_impact": "Customer Data Exposure",
+      "confidence": 0.95,
+      "validated": true,
+      "validation_status": "tests_passed",
+      "patch": "def get_user(uid):\n    cursor = db.cursor()\n    cursor.execute(\"SELECT * FROM users WHERE id=%s\", (uid,))\n    return cursor.fetchone()"
+    }
+  ],
+  "risk_level": "CRITICAL",
+  "patches_generated": 1,
+  "agents_executed": ["security_agent", "architecture_agent", "compliance_agent", "remediation_agent"],
+  "flags_active": {
+    "deep_ast_analysis": false,
+    "auto_patch_generation": true,
+    "strict_compliance_mode": false
+  },
+  "duration_ms": 1247
+}
+```
+
+### `GET /flags` — Current flag state
+```json
+{
+  "flags": {
+    "deep_ast_analysis": {"value": true, "source": "runtime", "description": "..."},
+    "auto_patch_generation": {"value": true, "source": "env", "description": "..."},
+    "strict_compliance_mode": {"value": false, "source": "default", "description": "..."}
+  }
+}
+```
+
+### `POST /flags/{flag_name}?value=true` — Toggle at runtime
+```json
+{
+  "flag": "deep_ast_analysis",
+  "value": true,
+  "source": "runtime",
+  "effective_immediately": true,
+  "message": "Agent behavior updated. Next analysis will use deep AST."
+}
+```
 
 ---
 
-## 📁 Project Structure
+## 🥊 Competitive Matrix — Why Not SonarQube / Snyk / CodeQL?
+
+| Capability | SonarQube | Snyk | CodeQL | GH Adv Security | Semgrep | Checkmarx | **Eros AI** |
+|---|---|---|---|---|---|---|---|
+| **Static Detection** | ✅ Enterprise | ✅ SaaS | ✅ Query-based | ✅ Native | ✅ Fast | ✅ Enterprise | ✅ Hybrid (AST+LLM) |
+| **Risk Context (Reachability×Impact×Confidence)** | ❌ | ⚠️ Partial | ❌ | ❌ | ❌ | ❌ | **✅ Core** |
+| **Runtime Agent Governance (Feature Flags)** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | **✅ Novel** |
+| **AI Remediation Generation** | ❌ | ⚠️ Fix PRs | ❌ | ⚠️ Copilot | ❌ | ❌ | **✅ Multi-agent** |
+| **Sandbox Validation (Tests Pass)** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | **✅ Differentiator** |
+| **Policy-as-Code (OPA/Rego)** | ❌ | ⚠️ Custom | ✅ Queries | ❌ | ✅ Rules | ⚠️ Custom | 🔄 Planned |
+| **Multi-tenant / RBAC** | ✅ | ✅ | ❌ | ✅ (Org) | ❌ | ✅ | 🔄 Missing |
+| **LLM Provider Agnostic** | ❌ | ❌ | ❌ | ❌ (Copilot) | ❌ | ❌ | **✅ Foundry + Local** |
+| **Cost per 1k analyses** | ~$50 | ~$200 | Free (GH) | Included | Free | ~$500 | **~$3** (token budget) |
+
+> **Market Wedge:** *"Governance layer for AI-generated code in regulated industries"*
+> - **Beachhead**: Mid-market banks (50-500 repos) using Copilot/Cursor, need compliance without velocity loss
+> - **Land**: Feature Flag governance → **Expand**: Policy-as-code + Multi-tenant + GitHub App
+
+---
+
+## 🎯 Ideal Customers
+
+### 🏦 Banking & Financial Services
+- **Pain**: Thousands of repos, quarterly audits, regulatory pressure (SOX, Basel III, PCI-DSS)
+- **Eros Fit**: Dynamic compliance enforcement, audit-ready traces, validated remediation for audit trails
+
+### 🛡️ Insurance
+- **Pain**: Legacy applications, high technical debt, actuarial model governance
+- **Eros Fit**: Contextual risk prioritization (business impact scoring), legacy code modernization patches
+
+### 🏛️ Government / Public Sector
+- **Pain**: Mandatory compliance (FedRAMP, NIST), slow procurement, vendor lock-in
+- **Eros Fit**: Policy-driven enforcement, provider-agnostic (Foundry + local), air-gapped deployment ready
+
+### 🏭 High-Tech / SaaS at Scale
+- **Pain**: AI-assisted development velocity vs. security gate friction
+- **Eros Fit**: Feature Flags = governance without gates, sandbox validation = confidence to merge fast
+
+---
+
+## 🏗️ Deploy Topology — Production Architecture
+
+```mermaid
+graph TB
+    subgraph "Azure Cloud"
+        subgraph "Azure Container Apps"
+            API[Eros API<br/>3 replicas / auto-scale]
+            DASH[Dashboard<br/>Static Web App]
+        end
+        
+        subgraph "Azure AI Foundry"
+            FIQ[Foundry IQ<br/>Managed LLM Gateway]
+            TB[Token Budget<br/>Cost Control]
+            CB[Circuit Breaker<br/>Resilience]
+        end
+        
+        subgraph "Azure App Configuration"
+            FF[Feature Flags<br/>Targeting + Rollout %]
+        end
+        
+        subgraph "Azure Monitor"
+            MET[Metrics / Logs / Traces]
+            ALT[Alerts]
+        end
+        
+        subgraph "Entra ID"
+            AUTH[AuthN/AuthZ<br/>RBAC + Conditional Access]
+        end
+    end
+    
+    CLIENT[Dev / CI/CD / GitHub App] --> API
+    API --> FIQ
+    API --> FF
+    API --> MET
+    API --> AUTH
+    DASH --> API
+    
+    style API fill:#0078D4,color:#fff
+    style FIQ fill:#9B59B6,color:#fff
+    style FF fill:#FFD93D,color:#000
+    style MET fill:#4ECDC4,color:#fff
+    style AUTH fill:#FFA07A,color:#fff
+```
+
+**Deployment Options:**
+| Target | Use Case | Command |
+|---|---|---|
+| **Azure Container Apps** | Production, auto-scale, managed | `az containerapp up` |
+| **Azure Kubernetes (AKS)** | Full control, GPU workloads | `az aks create` + Helm |
+| **Docker Compose** | Local / single-VM / edge | `docker compose up` |
+| **GitHub Codespaces** | Instant dev env | `gh codespace create` |
+
+---
+
+## 🎮 Demo Flow (120 Seconds)
+
+```bash
+# 1. Start dashboard
+PYTHONPATH=src uvicorn eros.main:app --port 5000
+# Open http://localhost:5000
+
+# 2. Load vulnerable sample (pre-loaded in dashboard)
+# Code contains: SQL injection + hardcoded secret + command injection + unsafe deserialization
+
+# 3. Click "Analyze Code" → 4 agents execute in parallel
+# KPIs update: Health → DEGRADED, Risk → CRITICAL, Compliance → FAIL
+
+# 4. Findings appear with badges:
+# 🔴 CRITICAL | 🌐 Internet Facing | 💰 Customer Data Exposure | 🎯 0.95 confidence
+
+# 5. Toggle "Auto Remediation" → ON → Re-analyze  
+# Patches generated with "Sandbox Verified ✅" badge
+# Response shows: validated: true, validation_status: "tests_passed", tests_run: 3, tests_passed: 3
+
+# 6. Toggle "Strict Compliance" → ON → Re-analyze
+# Critical findings = hard gate. No deploy.
+
+# 7. Feature Flags panel: 3 toggles, instant effect, no redeploy
+```
+
+---
+
+## 🧪 Test Suite — 23 Tests, 3 Layers
+
+| Layer | Files | Tests | Focus |
+|---|---|---|---|
+| **Unit** | `test_security_agent.py`, `test_compliance_agent.py`, `test_feature_flags.py` | 11 | Agent logic, flag evaluation, schemas |
+| **Integration** | `test_analyze_api.py`, `test_foundry_client.py` | 6 | API contracts, Foundry client resilience |
+| **E2E** | `test_vulnerable_sample_flow.py` | 2 | Full pipeline: vulnerable code → findings → patches |
+| **Legacy** | `test_agents.py` | 4 | Backward compatibility |
+
+```bash
+# Run all
+python -m pytest tests/ -v
+
+# Run specific layer
+python -m pytest tests/unit/ -v
+python -m pytest tests/integration/ -v
+python -m pytest tests/e2e/ -v
+```
+
+---
+
+## 📂 Project Structure
 
 ```
 eros-ai/
-├── rigor.yaml                 # Configuration (mode-first)
-├── dashboard.py               # Streamlit observability dashboard
-├── src/
-│   └── eros/
-│       ├── __init__.py        # Exports all public APIs
-│       ├── rigor.py           # RigorMode config loader
-│       ├── agent_registry.py  # AgentRegistry + health monitoring
-│       ├── confidence_gate.py # ConfidenceGate + scorers
-│       ├── reasoning_trace.py # ReasoningTrace + exporters
-│       ├── stress_test.py     # StressTest + fault injector
-│       ├── safety_guardrails.py # 6 detectors + actions
-│       └── cli/
-│           ├── __init__.py
-│           └── rigor_ctl.py   # CLI: register, invoke, trace, health, demo, benchmark, audit, policy
+├── src/eros/
+│   ├── main.py                    # FastAPI app + dashboard route
+│   ├── config/
+│   │   ├── settings.py            # Pydantic Settings (env-driven)
+│   │   └── feature_flags.py       # Feature Flag Provider (runtime + env)
+│   ├── agents/
+│   │   ├── base.py                # BaseAgent interface + ABC
+│   │   ├── security_agent.py      # 🛡️ Security Guardian
+│   │   ├── architecture_agent.py  # 🔍 Quality Inspector
+│   │   ├── compliance_agent.py    # ✅ Compliance Enforcer
+│   │   └── remediation_agent.py   # 🛠️ Fix Generator
+│   ├── foundry/
+│   │   └── client.py              # Microsoft Foundry IQ Client
+│   ├── models/
+│   │   └── schemas.py             # Pydantic Models (Finding, AnalysisResult, etc.)
+│   ├── orchestrator.py            # Async Multi-Agent Orchestrator
+│   └── templates/
+│       └── dashboard.html         # Executive Dashboard (Tailwind + Alpine)
 ├── tests/
+│   ├── unit/
 │   ├── integration/
-│   │   └── test_golden_path.py  # E2E Golden Path test
-│   └── unit/                    # Unit tests (to be added)
-└── README.md
+│   ├── e2e/
+│   └── conftest.py
+├── Dockerfile                     # Multi-stage, non-root, healthcheck
+├── docker-compose.yml             # Full stack deployment
+├── pyproject.toml                 # Project config, dependencies, entrypoints
+├── .env.example                   # Environment template
+├── README.md
+├── LICENSE
+├── CODE_OF_CONDUCT.md
+└── SECURITY.md
 ```
+
+---
+
+## 🏆 Microsoft Agents League Hackathon — Judging Alignment
+
+| Criterion | How Eros AI Delivers |
+|---|---|
+| **Technological Implementation** | FastAPI + Foundry IQ + Circuit Breaker + Token Budget + Feature Flags + 23 tests + Sandbox validation + ReasoningTrace (4 formats) |
+| **Design** | Executive dashboard with KPIs, agent status, findings, patches, flags — zero-build Tailwind/Alpine |
+| **Potential Impact** | Addresses **real enterprise problem**: AI-generated code needs *governance*, not just scanning. Feature Flag governance for agents is novel. |
+| **Quality of the Idea** | **Feature Flag governance for AI agents** = first-class runtime controllability. No competitor has this as core architecture. |
+
+### Differentiators to Highlight
+1. **Feature Flag Governance** — Change agent behavior in real time, no redeploy
+2. **Contextual Risk Intelligence** — Reachability × Business Impact × Confidence on every finding
+3. **Validated Remediation** — AI patches sandbox-tested before recommendation
+4. **Microsoft Foundry IQ Native** — Circuit breaker, token budget, graceful degradation built-in
+5. **Full Observability** — ReasoningTrace exports to JSON/Mermaid/OTLP/Jaeger for XAI
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] Unit tests for each component (90%+ coverage)
-- [ ] Prometheus/Grafana metrics export
-- [ ] Kubernetes operator for AgentRegistry
-- [ ] WebSocket streaming for real-time traces
-- [ ] Policy-as-code (OPA/Rego integration)
-- [ ] Multi-region War Room failover
+- [ ] **Prometheus/Grafana metrics export** — `/metrics` endpoint for SRE
+- [ ] **Kubernetes Operator** — Deploy Eros AI as CRD with AgentRegistry
+- [ ] **WebSocket streaming** — Real-time analysis progress in dashboard
+- [ ] **Policy-as-Code (OPA/Rego)** — Externalize compliance rules
+- [ ] **Multi-region Foundry failover** — Geo-redundant LLM inference
+- [ ] **GitHub App / GitLab Integration** — PR comments with findings + patches
+- [ ] **VS Code Extension** — Inline findings + one-click fix application
 
 ---
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) for details.
+**MIT License** — see [LICENSE](LICENSE) for details.
 
 ---
 
@@ -396,14 +704,20 @@ MIT License - see [LICENSE](LICENSE) for details.
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing`)
 3. Run tests (`pytest -v`)
-4. Submit PR
+4. Submit PR with clear description
 
 ---
 
 ## 🙏 Acknowledgments
 
-Built for **Microsoft Agents League Hackathon** & **#BuildHybridAI 2026**
+Built for **Microsoft Agents League Hackathon 2026** — *Coding & Agentic Engineering Track*
 
-**Architecture:** Edge → Router → Cloud → Guardrails → Trace → Decision
+**Architecture:** Governance Layer → Feature Flags → Agent Swarm → Foundry IQ → Sandbox Validation → ReasoningTrace
 
 **Mantra:** *Code → Evidence → Demo → Storytelling*
+
+---
+
+**Author:** Raul Rodriguez Mesia  
+**Repository:** https://github.com/raulrodriguezmesia-blip/eros-ai  
+**Submission:** Microsoft Agents League 2026

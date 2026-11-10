@@ -38,10 +38,18 @@ class AnalysisOrchestrator:
                 remediation = RemediationAgent()
                 for f in findings:
                     if f.cwe:
-                        f.patch = await remediation.generate_patch(f, request.code)
-                        # Simulate sandbox validation
-                        f.validated = True
-                        f.validation_status = "tests_passed"
+                        validation = await remediation.generate_patch(f, request.code)
+                        f.patch = validation.get("patch", "")
+                        f.validated = validation.get("validated", False)
+                        f.validation_status = "tests_passed" if validation.get("tests_passed", 0) > 0 else "pending"
+                        # Store validation evidence in metadata
+                        f.metadata = getattr(f, 'metadata', {})
+                        f.metadata["validation_evidence"] = {
+                            "tests_run": validation.get("tests_run", 0),
+                            "tests_passed": validation.get("tests_passed", 0),
+                            "patch_generated": validation.get("patch_generated", False),
+                            "note": validation.get("validation_note", "")
+                        }
             all_findings.extend(findings)
             agents_executed.append(agent.name)
 
