@@ -77,6 +77,8 @@ class LoadGenerator(ABC):
         concurrent: int,
         duration_sec: int,
         ramp_up_sec: int = 0,
+        target_args: tuple = (),
+        target_kwargs: Optional[Dict[str, Any]] = None,
     ) -> List[Dict[str, Any]]:
         pass
 
@@ -90,11 +92,14 @@ class SimpleLoadGenerator(LoadGenerator):
         concurrent: int,
         duration_sec: int,
         ramp_up_sec: int = 0,
+        target_args: tuple = (),
+        target_kwargs: Optional[Dict[str, Any]] = None,
     ) -> List[Dict[str, Any]]:
         results = []
         semaphore = asyncio.Semaphore(concurrent)
         start_time = time.time()
         end_time = start_time + duration_sec
+        target_kwargs = target_kwargs or {}
         
         async def worker(worker_id: int):
             # Ramp up delay
@@ -106,7 +111,7 @@ class SimpleLoadGenerator(LoadGenerator):
                 async with semaphore:
                     request_start = time.time()
                     try:
-                        result = await target()
+                        result = await target(*target_args, **target_kwargs)
                         latency_ms = (time.time() - request_start) * 1000
                         results.append({
                             "worker_id": worker_id,
@@ -236,6 +241,7 @@ class StressTest:
             concurrent=concurrent,
             duration_sec=duration,
             ramp_up_sec=ramp_up,
+            target_args=({},),
         )
         
         end_time = datetime.now(UTC)

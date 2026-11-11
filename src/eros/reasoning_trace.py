@@ -181,7 +181,7 @@ class SQLiteTraceStorage(TraceStorage):
                     trace.start_time.isoformat(),
                     trace.end_time.isoformat() if trace.end_time else None,
                     json.dumps(trace.metadata),
-                    json.dumps([asdict(e) for e in trace.events], default=str),
+                    json.dumps([{**asdict(e), "event_type": e.event_type.value} for e in trace.events], default=str),
                 ),
             )
     
@@ -248,7 +248,13 @@ class SQLiteTraceStorage(TraceStorage):
         
         results = []
         for row in rows:
-            events = [TraceEvent(**json.loads(e)) for e in json.loads(row["events"])]
+            event_dicts = json.loads(row["events"])
+            events = []
+            for e in event_dicts:
+                e_copy = e.copy()
+                if "event_type" in e_copy and isinstance(e_copy["event_type"], str):
+                    e_copy["event_type"] = TraceEventType(e_copy["event_type"])
+                events.append(TraceEvent(**e_copy))
             results.append(TraceContext(
                 trace_id=row["trace_id"],
                 root_agent_id=row["root_agent_id"],
@@ -313,22 +319,25 @@ class MermaidExporter(TraceExporter):
     def export(self, trace: TraceContext) -> str:
         lines = ["```mermaid", "graph TD"]
         
+        # Build node_id map using event_id
+        node_id_map = {e.event_id: f"E{i}" for i, e in enumerate(trace.events)}
+        
         # Add nodes
         for i, event in enumerate(trace.events):
-            node_id = f"E{i}"
-            label = f"{event.event_type.value}\\n{event.agent_id or 'system'}"
+            node_id = node_id_map[event.event_id]
+            label = f"{event.event_id}: {event.event_type.value}\\n{event.agent_id or 'system'}"
             if event.duration_ms:
                 label += f" ({event.duration_ms:.1f}ms)"
             lines.append(f'    {node_id}["{label}"]')
             
             if event.parent_event_id:
-                # Find parent index
-                for j, pe in enumerate(trace.events):
-                    if pe.event_id == event.parent_event_id:
-                        lines.append(f"    E{j} --> {node_id}")
-                        break
+                parent_node_id = node_id_map.get(event.parent_event_id)
+                if parent_node_id:
+                    lines.append(f"    {parent_node_id} --> {node_id}")
             elif i > 0:
-                lines.append(f"    E{i-1} --> {node_id}")
+                # Connect to previous event as fallback
+                prev_event = trace.events[i-1]
+                lines.append(f"    {node_id_map[prev_event.event_id]} --> {node_id}")
         
         lines.append("```")
         return "\n".join(lines)
@@ -397,10 +406,22 @@ class ReasoningTrace:
     """
     
     def __init__(self, config: Optional[ReasoningTraceConfig] = None):
-        self._config = config or get_rigor_mode().get_reasoning_trace_config()
+        if config is None:
+            # Create a fresh config from rigor mode to avoid test pollution
+            rigor_config = get_rigor_mode().get_reasoning_trace_config()
+            config = ReasoningTraceConfig(
+                enabled=rigor_config.enabled,
+                max_depth=rigor_config.max_depth,
+                storage=rigor_config.storage,
+                export_formats=list(rigor_config.export_formats),
+                sampling_rate=rigor_config.sampling_rate,
+                compression=rigor_config.compression,
+                retention_days=rigor_config.retention_days,
+                pii_redaction=rigor_config.pii_redaction,
+            )
+        self._config = config
         self._storage = self._create_storage()
         self._exporters = self._create_exporters()
-        self._sampling_rate = self._config.sampling_rate
         self._lock = asyncio.Lock()
         self._active_traces: Dict[str, TraceContext] = {}
         
@@ -431,6 +452,10 @@ class ReasoningTrace:
                 exporters[fmt] = JaegerExporter()
         return exporters
     
+    @property
+    def _sampling_rate(self) -> float:
+        return self._config.sampling_rate
+    
     def start_trace(
         self,
         root_agent_id: str,
@@ -447,7 +472,13 @@ class ReasoningTrace:
         
         # Sampling
         import random
-        if random.random() > self._sampling_rate:
+        if self._sampling_rate <= 0.0:
+            return TraceContext(
+                trace_id="sampled_out",
+                root_agent_id=root_agent_id,
+                session_id=session_id or str(uuid.uuid4()),
+            )
+        elif self._sampling_rate < 1.0 and random.random() > self._sampling_rate:
             return TraceContext(
                 trace_id="sampled_out",
                 root_agent_id=root_agent_id,
@@ -477,8 +508,15 @@ class ReasoningTrace:
         _current_trace.set(None)
         self._active_traces.pop(trace.trace_id, None)
         
-        # Persist asynchronously
-        asyncio.create_task(self._storage.save(trace))
+        # Persist asynchronously - handle both sync and async contexts
+        try:
+            loop = asyncio.get_running_loop()
+            loop.create_task(self._storage.save(trace))
+        except RuntimeError:
+            # No running loop - run in background thread
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                executor.submit(asyncio.run, self._storage.save(trace))
         
         logger.debug(f"Ended trace: {trace.trace_id} (duration={trace.duration_ms():.1f}ms)")
     
@@ -517,6 +555,7 @@ class ReasoningTrace:
         )
         
         trace.add_event(event)
+        trace._depth += 1
         return event
     
     async def export(self, trace_id: str, format: str) -> Optional[str]:

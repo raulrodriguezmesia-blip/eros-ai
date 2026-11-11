@@ -275,24 +275,21 @@ class AgentRegistry:
                     if not agent:
                         continue
                     
+                    # Always fire health_change callback with current health status
+                    for cb in self._callbacks["health_change"]:
+                        try:
+                            await cb(agent, healthy) if asyncio.iscoroutinefunction(cb) else cb(agent, healthy)
+                        except Exception:
+                            pass
+                    
                     if healthy:
                         agent.health_check_failures = 0
                         if agent.status != AgentStatus.HEALTHY:
                             await self.update_status(agent_id, AgentStatus.HEALTHY)
-                            for cb in self._callbacks["health_change"]:
-                                try:
-                                    await cb(agent, True) if asyncio.iscoroutinefunction(cb) else cb(agent, True)
-                                except Exception:
-                                    pass
                     else:
                         agent.health_check_failures += 1
                         if agent.health_check_failures >= 3:
                             await self.update_status(agent_id, AgentStatus.UNHEALTHY)
-                            for cb in self._callbacks["health_change"]:
-                                try:
-                                    await cb(agent, False) if asyncio.iscoroutinefunction(cb) else cb(agent, False)
-                                except Exception:
-                                    pass
             except Exception as e:
                 logger.warning(f"Health check failed for {agent_id}: {e}")
     

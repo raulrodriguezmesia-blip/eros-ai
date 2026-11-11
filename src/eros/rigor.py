@@ -44,11 +44,11 @@ class ReasoningTraceConfig:
 
 @dataclass
 class StressTestConfig:
-    enabled: bool
-    max_concurrent: int
-    duration_sec: int
-    scenarios: List[str]
-    ramp_up_sec: int = 0
+    enabled: bool = True
+    max_concurrent: int = 100
+    duration_sec: int = 60
+    scenarios: List[str] = field(default_factory=lambda: ["load"])
+    ramp_up_sec: int = 10
     distributed: bool = False
     sla_thresholds: Dict[str, Any] = field(default_factory=dict)
 

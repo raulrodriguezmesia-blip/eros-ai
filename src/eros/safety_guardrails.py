@@ -7,6 +7,8 @@ Implements PII detection, toxicity, prompt injection, hallucination, bias, and c
 from __future__ import annotations
 import re
 import logging
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, UTC
@@ -17,6 +19,10 @@ import hashlib
 from .rigor import get_rigor_mode, SafetyGuardrailsConfig
 
 logger = logging.getLogger(__name__)
+
+
+# Thread pool for running async code from sync contexts
+_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="safety-guardrails")
 
 
 class GuardrailAction(Enum):
@@ -402,8 +408,18 @@ class SafetyGuardrails:
         self._config = config or get_rigor_mode().get_safety_guardrails_config()
         self._detectors: List[GuardrailDetector] = []
         self._custom_rules: List[GuardrailRule] = []
-        self._audit_log: List[Dict[str, Any]] = [] if self._config.audit_log else None
+        self._audit_log: Optional[List[Dict[str, Any]]] = None
         
+        self._init_detectors()
+    
+    def _ensure_audit_log(self) -> None:
+        """Lazily initialize audit log if enabled."""
+        if self._config.audit_log and self._audit_log is None:
+            self._audit_log = []
+    
+    def _refresh_detectors(self) -> None:
+        """Re-initialize detectors from current config (useful if config changed)."""
+        self._detectors.clear()
         self._init_detectors()
     
     def _init_detectors(self) -> None:
@@ -459,6 +475,7 @@ class SafetyGuardrails:
                 ))
         
         # Audit log
+        self._ensure_audit_log()
         if self._audit_log is not None:
             for result in all_results:
                 if result.triggered:
@@ -488,13 +505,21 @@ class SafetyGuardrails:
         return GuardrailAction.LOG
     
     def is_allowed(self, text: str, context: Optional[Dict[str, Any]] = None) -> tuple[bool, List[GuardrailResult]]:
-        """Synchronous check for simple cases."""
-        # This would need async in real use
-        import asyncio
-        results = asyncio.run(self.check(text, context))
-        action = self.get_action(results)
-        allowed = action != GuardrailAction.BLOCK and action != GuardrailAction.BLOCK_AND_ALERT
-        return allowed, results
+        """Synchronous check for simple cases. Works in both sync and async contexts."""
+        
+        async def _run_check():
+            return await self.check_async(text, context)
+        
+        try:
+            # Try to get running loop (async context)
+            asyncio.get_running_loop()
+            # We're in an async context - run in thread pool to avoid deadlock
+            future = _executor.submit(asyncio.run, _run_check())
+            allowed, results = future.result(timeout=30)
+            return allowed, results
+        except RuntimeError:
+            # No running loop - we're in a sync context
+            return asyncio.run(_run_check())
     
     async def check_async(self, text: str, context: Optional[Dict[str, Any]] = None) -> tuple[bool, List[GuardrailResult]]:
         """Async check returning allow/deny decision."""
@@ -504,6 +529,7 @@ class SafetyGuardrails:
         return allowed, results
     
     def get_audit_log(self, limit: int = 100) -> List[Dict[str, Any]]:
+        self._ensure_audit_log()
         if not self._audit_log:
             return []
         return self._audit_log[-limit:]

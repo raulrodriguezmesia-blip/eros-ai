@@ -33,7 +33,7 @@ rigor:
       autocomplete: false
     safety_guardrails:
       enabled: true
-      rules: ["pii_detection", "toxicity"]
+      rules: ["pii_detection", "toxicity", "prompt_injection"]
       action: "log"
 
   # STANDARD MODE - Production-ready with more features
