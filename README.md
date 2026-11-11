@@ -1,13 +1,5 @@
 # 🛡️ Eros AI: Autonomous Engineering Governance Platform
-<div align="center">
 
-  <img src="https://img.shields.io/badge/EROS_AI-Enterprise_Reasoning_%26_Observability_System-0F172A?style=for-the-badge&logo=codeforces&logoColor=22D3EE" alt="EROS AI">
-
-  <h3><b>Analyze · Govern · Remediate · Validate</b></h3>
-  
-  <p><b>Enterprise Reasoning & Observability System</b></p>
-
-</div>
 
 [![M8ven Verified](https://img.shields.io/badge/M8ven-Verified-00D4AA?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMDBENEFBIiBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptLTIgMTVsLTUtNSAxLjQxLTEuNDFsNC41OSA0LjU5IDEwLjU5LTEwLjU5TDE5IDhsLTEyIDEyek17LjUgMTIuNUwxMiAxNWwtNC41LTQuNUwxNy41IDhsLTQgNC41IDQgNC41eiIvPjwvc3ZnPg==)](https://m8ven.ai) [![Hackathon](https://img.shields.io/badge/Microsoft%20Agents%20League-2026-0078D4?style=for-the-badge&logo=microsoft&logoColor=white)](https://devpost.com) [![Track](https://img.shields.io/badge/Track-Coding%20%26%20Agentic%20Engineering-76B900?style=for-the-badge)](https://devpost.com) [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE) [![Python](https://img.shields.io/badge/Python-3.11+-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org) [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com) [![Azure](https://img.shields.io/badge/Azure%20Foundry-IQ-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/en-us/products/ai-foundry)
 
