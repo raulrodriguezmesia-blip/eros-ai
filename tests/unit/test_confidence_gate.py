@@ -15,6 +15,9 @@ from eros import (
     CalibrationModel,
     get_confidence_gate,
     set_confidence_gate,
+    get_rigor_mode,
+    RigorMode,
+    ConfidenceGateConfig,
 )
 
 
@@ -181,9 +184,18 @@ class TestProbabilisticScorer:
 class TestConfidenceGate:
     """Test ConfidenceGate main functionality."""
     
-    @pytest.fixture
-    def gate(self):
-        return ConfidenceGate()
+@pytest.fixture
+def gate(self):
+    # Use explicit demo config to avoid singleton contamination
+    demo_config = ConfidenceGateConfig(
+        min_confidence=0.7,
+        fallback="human_review",
+        thresholds={"low": 0.5, "medium": 0.7, "high": 0.9},
+        calibration_enabled=False,
+        adaptive_thresholds=False,
+        audit_trail=False,
+    )
+    return ConfidenceGate(config=demo_config)
     
     @pytest.mark.asyncio
     async def test_evaluate_allowed_high_confidence(self, gate):

@@ -21,6 +21,7 @@ from eros import (
     get_reasoning_trace,
     set_reasoning_trace,
     traced,
+    ReasoningTraceConfig,
 )
 
 
@@ -313,7 +314,18 @@ class TestReasoningTrace:
     
     @pytest.fixture
     def trace(self):
-        return ReasoningTrace()
+        # Use explicit demo config to avoid singleton contamination
+        demo_config = ReasoningTraceConfig(
+            enabled=True,
+            max_depth=10,
+            storage="memory",
+            export_formats=["json", "mermaid"],
+            sampling_rate=1.0,
+            compression=False,
+            retention_days=7,
+            pii_redaction=False,
+        )
+        return ReasoningTrace(config=demo_config)
     
     @pytest.mark.asyncio
     async def test_start_end_trace(self, trace):
