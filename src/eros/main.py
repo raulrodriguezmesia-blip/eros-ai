@@ -14,6 +14,10 @@ BASE_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 STATIC_DIR = BASE_DIR / "static"
 
+print(f"[DEBUG] BASE_DIR: {BASE_DIR}")
+print(f"[DEBUG] STATIC_DIR: {STATIC_DIR}")
+print(f"[DEBUG] STATIC_DIR.exists(): {STATIC_DIR.exists()}")
+print(f"[DEBUG] STATIC_DIR contents: {list(STATIC_DIR.iterdir()) if STATIC_DIR.exists() else 'N/A'}")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

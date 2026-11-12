@@ -15,8 +15,6 @@ from eros import (
     CalibrationModel,
     get_confidence_gate,
     set_confidence_gate,
-    get_rigor_mode,
-    RigorMode,
     ConfidenceGateConfig,
 )
 
