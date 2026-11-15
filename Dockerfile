@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- Builder stage ----
-FROM python:3.11-slim AS builder
+FROM python:3.15-slim AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY src/ src/
 RUN pip install --no-cache-dir .
 
 # ---- Runtime stage ----
-FROM python:3.11-slim AS runtime
+FROM python:3.15-slim AS runtime
 
 WORKDIR /app
 
