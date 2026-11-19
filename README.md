@@ -214,6 +214,7 @@ python -m pytest tests/integration/test_golden_path.py tests/integration/test_an
 
 ## Author
 
-**Raúl Rodríguez Mesia**  
-Repository: https://github.com/raulrodriguezmesia-blip/eros-ai  
-Submission: Microsoft Agents League 2026 — *Coding & Agentic Engineering Track*
+** Raúl Rodríguez Mesia  
+**Repositorio:** https://github.com/raulrodriguezmesia-blip/eros-ai  
+**Referencia de creación:** EROS AI — #BuildHybridAI 2026!  
+**Evolución y participación:** Iniciado en Microsoft Agents League 2026 (Programación e Ingeniería de Agentes) y consolidado como Enterprise Reasoning & Observability System (`v1.0-hackathon-submission`).
