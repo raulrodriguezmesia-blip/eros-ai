@@ -10,6 +10,15 @@ EROS AI is an **Autonomous Engineering Governance Platform** that analyzes, gove
 
 ## 🎥 Demo Video
 **2-minute walkthrough:** https://youtu.be/Y5Fm0csCYQg
+<div align="center">
+
+  <p><em>Watch the full architectural walkthrough and live EROS AI governance demonstration</em></p>
+
+  <a href="https://youtu.be/Y5Fm0csCYQg">
+    <img src="https://img.youtube.com/vi/Y5Fm0csCYQg/maxresdefault.jpg" alt="EROS AI — Trust Layer for AI-Generated Code Demo" width="85%">
+  </a>
+
+</div>
 
 ## 📦 Repository
 **Source code:** https://github.com/raulrodriguezmesia-blip/eros-ai
